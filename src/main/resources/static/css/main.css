@@ -98,6 +98,70 @@ textarea {
    Author's custom styles
    ========================================================================== */
 
+main {
+  background-color: dimgrey;
+  padding: 15px;
+  text-align: center;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* CSS property for header section */
+.header {
+  background-color: steelblue;
+  padding: 15px;
+  text-align: center;
+}
+
+/* CSS property for nevigation menu */
+.nav_menu {
+  overflow: hidden;
+  background-color: #333;
+}
+.nav_menu a {
+  float: left;
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+.nav_menu a:hover {
+  background-color: white;
+  color: dimgrey;
+}
+
+/* CSS property for content section */
+.columnA, .columnB, .columnC {
+  float: left;
+  width: 31%;
+  padding: 15px;
+  text-align:justify;
+}
+h2 {
+  color:steelblue;
+  text-align:center;
+}
+
+/* Media query to set website layout
+according to screen size */
+@media screen and (max-width:600px) {
+  .columnA, .columnB, .columnC {
+    width: 50%;
+  }
+}
+@media screen and (max-width:400px) {
+  .columnA, .columnB, .columnC {
+    width: 100%;
+  }
+}
+
+
+
+
+
 /* ==========================================================================
    Helper classes
    ========================================================================== */
@@ -263,4 +327,3 @@ textarea {
     page-break-after: avoid;
   }
 }
-

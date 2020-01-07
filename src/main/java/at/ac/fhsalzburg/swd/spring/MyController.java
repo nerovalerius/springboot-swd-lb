@@ -62,7 +62,7 @@ public class MyController {
 
 		model.addAttribute("message",testService.doSomething());
 		
-		model.addAttribute("halloNachricht","welchem to SWD lab");
+		model.addAttribute("halloNachricht","welcome to SWD lab");
 
 		model.addAttribute("customers", repo.findAll());
 		

@@ -1,10 +1,11 @@
 <!DOCTYPE HTML>
 <html lang="de" class="no-js" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>Spring Boot Thymeleaf Hello World Example</title>
+     <title>Best Parking Ever</title>
     
      <link rel="manifest" href="site.webmanifest">
   	 <link rel="apple-touch-icon" href="icon.png">
@@ -17,45 +18,81 @@
     
 </head>
 
+
+
+
+
 <body>
   <!--[if IE]>
     <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
   <![endif]-->
 
+  <main>
 
-<main>
+      <!-- header of website layout -->
+      <div class = "header">
+          <h1>Best Parking Ever</h1>
+          <span th:text="${halloNachricht}"></span>
+      </div>
 
-        <h1>Spring Boot Web Thymeleaf Example Hello</h1>
-        <span th:text="${halloNachricht}"></span> 
-        <h2>
-            <span th:text="'Service counter, ' + ${message}"></span>
-            <br>
-			<span th:text="'Session counter, ' + ${session.count.toString()}"></span>		
-						
-        </h2>
-        <h2>
-        	<span th:text="'Singleton Bean, ' + ${beanSingleton}"></span>
-        	<br>
-        	<span th:text="'Prototype Bean, ' + ${beanPrototype}"></span>
-        	<br>
-        	<span th:text="'Session Bean, ' + ${beanSession}"></span>
-        </h2>
-        
-         <a href="addCustomer">Add Customer</a>
-	      <br/><br/>
-         <table border="1">
-            <tr>
-               <th>First Name</th>
-               <th>Last Name</th>
-            </tr>
-            <tr th:each ="customer : ${customers}">
-               <td th:utext="${customer.firstName}">...</td>
-               <td th:utext="${customer.lastName}">...</td>
-            </tr>
-         </table>
 
-</main>
-<!-- /.container -->
+
+      <!-- nevigation menu of website layout -->
+      <div class = "nav_menu">
+          <a href="addCustomer">Add Customer</a>
+          <a href = "orderTicket">Order Ticket</a>
+          <a href = "payTicket">Pay Ticket</a>
+      </div>
+
+
+      <!-- Content section of website layout -->
+      <div class = "row">
+
+          <div class = "columnA">
+              <h2>Technical Information</h2>
+              <a>
+                  <span th:text="'Singleton Bean, ' + ${beanSingleton}"></span>
+                  <br>
+                  <span th:text="'Prototype Bean, ' + ${beanPrototype}"></span>
+                  <br>
+                  <span th:text="'Session Bean, ' + ${beanSession}"></span>
+                  <br>
+                  <span th:text="'Service counter, ' + ${message}"></span>
+                  <br>
+                  <span th:text="'Session counter, ' + ${session.count.toString()}"></span>
+                  <br>
+              </a>
+          </div>
+
+          <div class = "columnB">
+              <h2>Customers</h2>
+              <br/><br/>
+              <table border="1">
+                  <tr>
+                      <th>First Name</th>
+                      <th>Last Name</th>
+                  </tr>
+                  <tr th:each ="customer : ${customers}">
+                      <td th:utext="${customer.firstName}">...</td>
+                      <td th:utext="${customer.lastName}">...</td>
+                  </tr>
+              </table>
+          </div>
+
+          <div class = "columnC">
+              <h2>Column C</h2>
+              <p>Prepare for the Recruitment drive of product
+                  based companies like Microsoft, Amazon, Adobe
+                  etc with a free online placement preparation
+                  course. The course focuses on various MCQ's
+                  & Coding question likely to be asked in the
+                  interviews & make your upcoming placement
+                  season efficient and successful.</p>
+          </div>
+      </div>
+
+  </main>
+  <!-- /.container -->
 
 
 

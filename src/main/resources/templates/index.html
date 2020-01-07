@@ -33,15 +33,18 @@
       <div class = "header">
           <h1>Best Parking Ever</h1>
           <span th:text="${halloNachricht}"></span>
+          </br>
+          <h1>MAIN MENU</h1>
       </div>
 
 
 
       <!-- nevigation menu of website layout -->
       <div class = "nav_menu">
+          <a href="/">MAIN MENU</a>
           <a href="addCustomer">Add Customer</a>
-          <a href = "orderTicket">Order Ticket</a>
-          <a href = "payTicket">Pay Ticket</a>
+          <a href="orderTicket">Order Ticket</a>
+          <a href="payTicket">Pay Ticket</a>
       </div>
 
 
@@ -49,6 +52,25 @@
       <div class = "row">
 
           <div class = "columnA">
+              <h2>Welcome</h2>
+          </div>
+
+          <div class = "columnB">
+              <h2>List of Customers</h2>
+              <br/><br/>
+              <table border="1">
+                  <tr>
+                      <th>First Name</th>
+                      <th>Last Name</th>
+                  </tr>
+                  <tr th:each ="customer : ${customers}">
+                      <td th:utext="${customer.firstName}">...</td>
+                      <td th:utext="${customer.lastName}">...</td>
+                  </tr>
+              </table>
+          </div>
+
+          <div class = "columnC">
               <h2>Technical Information</h2>
               <a>
                   <span th:text="'Singleton Bean, ' + ${beanSingleton}"></span>
@@ -64,31 +86,6 @@
               </a>
           </div>
 
-          <div class = "columnB">
-              <h2>Customers</h2>
-              <br/><br/>
-              <table border="1">
-                  <tr>
-                      <th>First Name</th>
-                      <th>Last Name</th>
-                  </tr>
-                  <tr th:each ="customer : ${customers}">
-                      <td th:utext="${customer.firstName}">...</td>
-                      <td th:utext="${customer.lastName}">...</td>
-                  </tr>
-              </table>
-          </div>
-
-          <div class = "columnC">
-              <h2>Column C</h2>
-              <p>Prepare for the Recruitment drive of product
-                  based companies like Microsoft, Amazon, Adobe
-                  etc with a free online placement preparation
-                  course. The course focuses on various MCQ's
-                  & Coding question likely to be asked in the
-                  interviews & make your upcoming placement
-                  season efficient and successful.</p>
-          </div>
       </div>
 
   </main>

@@ -39,7 +39,7 @@ public class MyController {
     @Autowired
 	TestBean singletonBean;
     
-    
+    //test
     
 	
 	@RequestMapping("/")

@@ -23,15 +23,16 @@ https://docs.google.com/presentation/d/1EXSUTexIu8wY7Dm6rB_ic7VbUdBot-yTXP-68LC5
   
 # TODOs - Use-Cases
 ## Our use cases
-#### Overview - (Max)
-Google Doc - Page 11  
+#### Drive Through Gate
+(Max) als REST Service
+Google Doc - Page 23 
 
-#### Ticket Ordering - (Armin)
-Google Doc - Page 12  
+#### Order Ticket via Website
+(Armin) als Website
+Google Doc - Page 24  
 
-#### Defective Gate
-Google Doc - Page 13  
-(really needed?)
+#### Softwaretests - (Beide)
+
 
 # Tutorials
 #### thymeleaf

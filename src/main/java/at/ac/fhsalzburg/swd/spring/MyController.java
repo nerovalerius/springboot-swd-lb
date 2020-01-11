@@ -137,10 +137,6 @@ public class MyController {
 		return "orderTicket";
 	}
 
-
-
-
-
 	// Mappings for REST-Service
 	
 	@GetMapping("/customers")

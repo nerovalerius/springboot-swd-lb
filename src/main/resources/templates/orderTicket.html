@@ -48,10 +48,10 @@
     <div class = "row">
 
         <div class = "columnA">
-            <h2>Customer Formular</h2>
+            <h2>Order Ticket</h2>
             <a>
-                <form th:action="@{/addCustomer}"
-                      th:object="${customerForm}" method="POST">
+                <form th:action="@{/orderTicket}"
+                      th:object="${ticketForm}" method="POST">
                     First Name:
                     <input type="text" th:field="*{firstName}" />
                     <br/>
@@ -80,22 +80,8 @@
         </div>
 
         <div class = "columnC">
-            <h2>Technical Information</h2>
-            <a>
-                <span th:text="'Singleton Bean, ' + ${beanSingleton}"></span>
-                <br>
-                <span th:text="'Prototype Bean, ' + ${beanPrototype}"></span>
-                <br>
-                <span th:text="'Session Bean, ' + ${beanSession}"></span>
-                <br>
-                <span th:text="'Service counter, ' + ${message}"></span>
-                <br>
-                <span th:text="'Session counter, ' + ${session.count.toString()}"></span>
-                <br>
-            </a>
+
         </div>
-
-
 
     </div>
 

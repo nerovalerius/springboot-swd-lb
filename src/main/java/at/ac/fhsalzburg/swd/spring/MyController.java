@@ -113,7 +113,7 @@ public class MyController {
 
 	@RequestMapping(value = { "/orderTicket" }, method = RequestMethod.POST)
 	public String orderTicket(Model model, //
-							  @ModelAttribute("ticketForm")TicketForm ticketForm) {
+		@ModelAttribute("ticketForm")TicketForm ticketForm) {
 		String firstName = ticketForm.getFirstName();
 		String lastName = ticketForm.getLastName();
 
@@ -136,6 +136,7 @@ public class MyController {
 
 		return "orderTicket";
 	}
+
 
 
 

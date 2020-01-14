@@ -50,15 +50,15 @@
         <div class = "columnA">
             <h2>Order Ticket</h2>
             <a>
-                <form th:action="@{/orderTicket}"
+                <form th:action="@{/manageTickets}"
                       th:object="${ticketForm}" method="POST">
                     Valid from:
-                    <input type="text" th:field="*{from}" />
+                    <input type="text" th:field="*{sqlFrom}" />
                     <br/>
                     Valid until:
-                    <input type="text" th:field="*{to}" />
+                    <input type="text" th:field="*{sqlTo}" />
                     <br/>
-                    <input type="submit" value="Create Customer" />
+                    <input type="submit" value="Order Ticket" />
                 </form>
                 <br>
             </a>
@@ -79,7 +79,7 @@
                 </tr>
                 <tr th:each ="ticket : ${tickets}">
                     <td th:utext="${ticket.id}">...</td>
-                    <td th:utext="${ticket.from}">...</td>
+                    <td th:utext="${ticket.sqlFrom}">...</td>
                     <td th:utext="${ticket.to}">...</td>
                 </tr>
             </table>

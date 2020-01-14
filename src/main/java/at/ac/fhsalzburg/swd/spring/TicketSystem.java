@@ -9,6 +9,7 @@ public class TicketSystem {
 
     @Autowired //don't forget the setter
     private TicketRepository ticket_repository;
+    @Autowired //don't forget the setter
     private CustomerRepository customerRepository;
 
     private int utilization;
@@ -24,7 +25,8 @@ public class TicketSystem {
     // GET NEW TICKET - In class diagram referred to getNewTicket(customer Customer)
     Ticket getNewTicket(Ticket ticket){
         ticket_repository.save(ticket);
-        return ticket_repository.findByTicket(ticket);
+        //return ticket_repository.findByTicket(ticket);
+        return new Ticket();
     };
 
 

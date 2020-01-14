@@ -6,27 +6,27 @@ import java.util.Date;
 
 public class TicketForm {
 
-    SimpleDateFormat dateFormat = new SimpleDateFormat("dd MM yyyy");
-    private Date to;
-    private Date  from;
-
+    private java.sql.Date sqlTo;
+    private java.sql.Date sqlFrom;
 
 
     // GETTERS & SETTERS
-    public Date to() {
-        return to;
+    public java.sql.Date getSqlTo() {
+        return sqlTo;
+    }
+
+    public void setSqlTo(String to) throws ParseException {
+        java.util.Date dateFormat = new SimpleDateFormat("dd MMM yyyy").parse("01 NOVEMBER 2012");
+        this.sqlTo = new java.sql.Date(dateFormat.getTime());
     }
  
-    public void setFirstName(String to) throws ParseException {
-        this.to = dateFormat.parse(to);
-    }
- 
-    public Date from() {
-        return from;
+    public java.sql.Date getSqlFrom() {
+        return sqlFrom;
     }
  
     public void setLastName(String from) throws ParseException {
-        this.to = dateFormat.parse(from);
+        java.util.Date dateFormat = new SimpleDateFormat("dd MMM yyyy").parse("01 NOVEMBER 2012");
+        this.sqlFrom = new java.sql.Date(dateFormat.getTime());
     }
      
 }

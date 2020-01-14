@@ -1,11 +1,8 @@
 package at.ac.fhsalzburg.swd.spring;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.time.LocalDate;
-import java.util.Date;
+import javax.persistence.*;
+import java.sql.Date;
+
 
 @Entity
 public class Ticket {
@@ -14,25 +11,36 @@ public class Ticket {
 	@Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
-    private Date to;
-    private Date from;
+
+    private java.sql.Date sqlTo;		// Ich habe wirklich alles mögliche probiert.    @Temporal(TemporalType.TIMESTAMP)^...  @Temporal(TemporalType.DATE)...
+    private java.sql.Date sqlFrom;		// erst wenn das wort sql im variablen namen drinnen ist wird das sql statement korrekt erstellt, ansonsten gibt es eine hibernate h2 exception: expected identifier...
+
+	public Date getSqlDate() {
+		return sqlDate;
+	}
+
+	public void setSqlDate(Date sqlDate) {
+		this.sqlDate = sqlDate;
+	}
+
+	private java.sql.Date sqlDate;
     private String type;
 
 
     // CONSTRUCTORS
     protected Ticket() {}
 
-    public Ticket(Date to, Date from, String type) {
-        this.to = to;
-        this.from = from;
+    public Ticket(java.sql.Date sqlTo, java.sql.Date sqlFrom, String type) {
+        this.sqlTo = sqlTo;
+        this.sqlFrom = sqlFrom;
         this.type = type;
 
     }
 
 	public Ticket(Ticket ticket) {
     	this.id = ticket.id;
-    	this.to = ticket.to;
-    	this.from = ticket.from;
+    	this.sqlTo = ticket.sqlTo;
+    	this.sqlFrom = ticket.sqlFrom;
     	this.type = ticket.type;
 	}
 
@@ -46,20 +54,20 @@ public class Ticket {
 		this.id = id;
 	}
 
-	public Date getTo() {
-		return to;
+	public java.sql.Date getSqlTo() {
+		return sqlTo;
 	}
 
-	public void setTo(Date to) {
-		this.to = to;
+	public void setSqlTo(java.sql.Date to) {
+		this.sqlTo = to;
 	}
 
-	public Date getFrom() {
-		return from;
+	public java.sql.Date getSqlFrom() {
+		return sqlFrom;
 	}
 
-	public void setFrom(Date from) {
-		this.from = from;
+	public void setSqlFrom(java.sql.Date sqlFrom) {
+		this.sqlFrom = sqlFrom;
 	}
 
 	public String getType() {

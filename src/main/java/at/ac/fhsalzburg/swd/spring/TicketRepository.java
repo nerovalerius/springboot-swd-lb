@@ -11,11 +11,12 @@ import java.util.List;
 public interface TicketRepository extends CrudRepository<Ticket, Long> {
 
 	@Transactional(timeout = 10)
-    List<Ticket> findByLastName(String lastName);
+	Ticket findById(long id);
 
 	@Transactional(timeout = 10)
-	Ticket findById(long id);
-	
+	Ticket findByTicket(Ticket ticket);
+
+
 	//@Transactional(timeout = 10)
 	//@Override
 	//Customer save(Customer customer);

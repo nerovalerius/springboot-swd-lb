@@ -32,16 +32,16 @@
     <div class = "header">
         <h1>Best Parking Ever</h1>
         </br>
-        <h1>ORDER TICKET</h1>
+        <h1>MANAGE TICKETS</h1>
         <span th:text="${halloNachricht}"></span>
     </div>
 
     <!-- nevigation menu of website layout -->
     <div class = "nav_menu">
         <a href="/">MAIN MENU</a>
-        <a href="addCustomer">Add Customer</a>
-        <a href = "orderTicket">Order Ticket</a>
-        <a href = "payTicket">Pay Ticket</a>
+        <a href="manageCustomers">Manage Customers</a>
+        <a href="manageTickets">Manage Tickets</a>
+        <a href="managePayments">Manage Payments</a>
     </div>
 
     <!-- Content section of website layout -->
@@ -52,11 +52,11 @@
             <a>
                 <form th:action="@{/orderTicket}"
                       th:object="${ticketForm}" method="POST">
-                    First Name:
-                    <input type="text" th:field="*{firstName}" />
+                    Valid from:
+                    <input type="text" th:field="*{from}" />
                     <br/>
-                    Last Name:
-                    <input type="text" th:field="*{lastName}" />
+                    Valid until:
+                    <input type="text" th:field="*{to}" />
                     <br/>
                     <input type="submit" value="Create Customer" />
                 </form>
@@ -65,22 +65,24 @@
         </div>
 
         <div class = "columnB">
-            <h2>List of Customers</h2>
-            <br/><br/>
-            <table border="1">
-                <tr>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                </tr>
-                <tr th:each ="customer : ${customer}">
-                    <td th:utext="${customer.firstName}">...</td>
-                    <td th:utext="${customer.lastName}">...</td>
-                </tr>
-            </table>
+
         </div>
 
         <div class = "columnC">
-
+            <h2>List of Tickets</h2>
+            <br/><br/>
+            <table border="1">
+                <tr>
+                    <th>Ticket Id</th>
+                    <th>Valid from</th>
+                    <th>Valid until</th>
+                </tr>
+                <tr th:each ="ticket : ${tickets}">
+                    <td th:utext="${ticket.id}">...</td>
+                    <td th:utext="${ticket.from}">...</td>
+                    <td th:utext="${ticket.to}">...</td>
+                </tr>
+            </table>
         </div>
 
     </div>

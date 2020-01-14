@@ -1,24 +1,32 @@
 package at.ac.fhsalzburg.swd.spring;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class TicketForm {
- 
-    private String firstName;
-    private String lastName;
- 
-    public String getFirstName() {
-        return firstName;
+
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd MM yyyy");
+    private Date to;
+    private Date  from;
+
+
+
+    // GETTERS & SETTERS
+    public Date to() {
+        return to;
     }
  
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setFirstName(String to) throws ParseException {
+        this.to = dateFormat.parse(to);
     }
  
-    public String getLastName() {
-        return lastName;
+    public Date from() {
+        return from;
     }
  
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setLastName(String from) throws ParseException {
+        this.to = dateFormat.parse(from);
     }
      
 }

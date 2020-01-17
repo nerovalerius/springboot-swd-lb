@@ -1,7 +1,7 @@
 package at.ac.fhsalzburg.swd.spring;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.time.LocalDate;
 
 
 @Entity
@@ -12,34 +12,36 @@ public class Ticket {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
 
-    private java.sql.Date sqlTo;		// Ich habe wirklich alles mögliche probiert.    @Temporal(TemporalType.TIMESTAMP)^...  @Temporal(TemporalType.DATE)...
-    private java.sql.Date sqlFrom;		// erst wenn das wort sql im variablen namen drinnen ist wird das sql statement korrekt erstellt, ansonsten gibt es eine hibernate h2 exception: expected identifier...
-
-	public Date getSqlDate() {
-		return sqlDate;
+    private LocalDate sqlTo;		// Ich habe wirklich alles mögliche probiert.    @Temporal(TemporalType.TIMESTAMP)^...  @Temporal(TemporalType.DATE)...
+    private LocalDate sqlFrom;		// erst wenn das wort sql im variablen namen drinnen ist wird das sql statement korrekt erstellt, ansonsten gibt es eine hibernate h2 exception: expected identifier...
+	
+	
+	
+	public LocalDate getSqlDate() {
+		return Date;
 	}
 
-	public void setSqlDate(Date sqlDate) {
-		this.sqlDate = sqlDate;
+	public void setSqlDate(LocalDate sqlDate) {
+		this.Date = sqlDate;
 	}
 
-	private java.sql.Date sqlDate;
+	private LocalDate Date;
     private String type;
 
 
     // CONSTRUCTORS
     protected Ticket() {}
 
-    public Ticket(java.sql.Date sqlTo, java.sql.Date sqlFrom, String type) {
-        this.sqlTo = sqlTo;
-        this.sqlFrom = sqlFrom;
+    public Ticket(LocalDate to, LocalDate from, String type) {
+        this.sqlTo = to;
+        this.sqlFrom = from;
         this.type = type;
 
     }
 
 	public Ticket(Ticket ticket) {
     	this.id = ticket.id;
-    	this.sqlTo = ticket.sqlTo;
+    	this.sqlTo = ticket.sqlTo;			// Funktioniert ohne sql im Namen nicht, weder mit java.util.date noch LocalDate
     	this.sqlFrom = ticket.sqlFrom;
     	this.type = ticket.type;
 	}
@@ -54,20 +56,20 @@ public class Ticket {
 		this.id = id;
 	}
 
-	public java.sql.Date getSqlTo() {
+	public LocalDate getTo() {
 		return sqlTo;
 	}
 
-	public void setSqlTo(java.sql.Date to) {
+	public void setTo(LocalDate to) {
 		this.sqlTo = to;
 	}
 
-	public java.sql.Date getSqlFrom() {
+	public LocalDate getFrom() {
 		return sqlFrom;
 	}
 
-	public void setSqlFrom(java.sql.Date sqlFrom) {
-		this.sqlFrom = sqlFrom;
+	public void setFrom(LocalDate From) {
+		this.sqlFrom = From;
 	}
 
 	public String getType() {

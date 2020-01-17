@@ -2,31 +2,29 @@ package at.ac.fhsalzburg.swd.spring;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
 
 public class TicketForm {
 
-    private java.sql.Date sqlTo;
-    private java.sql.Date sqlFrom;
+    private LocalDate To;
+    private LocalDate From;
 
 
     // GETTERS & SETTERS
-    public java.sql.Date getSqlTo() {
-        return sqlTo;
+    public LocalDate getSqlTo() {
+        return To;
     }
 
     public void setSqlTo(String to) throws ParseException {
-        java.util.Date dateFormat = new SimpleDateFormat("dd MMM yyyy").parse("01 NOVEMBER 2012");
-        this.sqlTo = new java.sql.Date(dateFormat.getTime());
+        this.To  = LocalDate.of(Integer.parseInt("0"), Integer.parseInt("0"), Integer.parseInt("0"));
     }
  
-    public java.sql.Date getSqlFrom() {
-        return sqlFrom;
+    public LocalDate getSqlFrom() {
+        return From;
     }
  
     public void setLastName(String from) throws ParseException {
-        java.util.Date dateFormat = new SimpleDateFormat("dd MMM yyyy").parse("01 NOVEMBER 2012");
-        this.sqlFrom = new java.sql.Date(dateFormat.getTime());
+        this.From  = LocalDate.of(Integer.parseInt("0"), Integer.parseInt("0"), Integer.parseInt("0"));
     }
      
 }

@@ -1,5 +1,6 @@
 package at.ac.fhsalzburg.swd.spring;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -60,7 +61,7 @@ public class MyController {
 			Integer count = (Integer) session.getAttribute("count");
 			if (count==null)
 			{
-				count = new Integer(0);
+				count = 0;
 			}
 			count++;
 			session.setAttribute("count", count);
@@ -130,17 +131,17 @@ public class MyController {
 	public String orderTicket(Model model, //
 							  @ModelAttribute("ticketForm")TicketForm ticketForm) {
 
-		java.sql.Date to = ticketForm.getSqlTo();
-		java.sql.Date from = ticketForm.getSqlFrom();
+		LocalDate to = ticketForm.getSqlTo();
+		LocalDate from = ticketForm.getSqlFrom();
 
 		if (to != null  && from != null) {
 			Ticket ticket = new Ticket();
 
 			// Calculate the difference in days
-			long days_difference = to.getTime() - from.getTime();
+			long days_difference = to.getDayOfYear() - from.getDayOfYear();
 			days_difference = TimeUnit.DAYS.convert(days_difference, TimeUnit.MILLISECONDS);
-			ticket.setSqlFrom(from);
-			ticket.setSqlTo(to);
+			ticket.setFrom(from);
+			ticket.setTo(to);
 
 			// Longer than 5 days = permanent ticket
 			if (days_difference > 5){

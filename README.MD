@@ -1,5 +1,5 @@
 # springboot-swd-lb
-#### Google Doc
+#### Google Do
 https://docs.google.com/document/d/1H7Tal6W9KrDDkg_oKDbg-fVBxOQ1JpuBkje1vl_tIIM/edit
 
 #### Info

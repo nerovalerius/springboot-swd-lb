@@ -45,6 +45,7 @@ public class MyController {
 	@Autowired
 	TestBean singletonBean;
 
+	// Hier noch singleton
 	CustomerManagement customerManagement = new CustomerManagement(ticket_repository, customer_repository);
 	TicketSystem ticketSystem = new TicketSystem(ticket_repository, customer_repository);
 

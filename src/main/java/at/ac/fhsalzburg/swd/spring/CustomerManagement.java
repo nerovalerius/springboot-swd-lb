@@ -1,27 +1,54 @@
 package at.ac.fhsalzburg.swd.spring;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Service
 public class CustomerManagement {
 
-    @Autowired //don't forget the setter
+    @Autowired
     private CustomerRepository customer_repository;
-    private TicketRepository ticket_repository;
+
+    String status;
+    Customer currentCustomer;
 
     // ADD CUSTOMER
     void addCustomer(Customer customer){
-            // Customer already in list?
+        // Customer already in list?
+        try {
             if (customer_repository.findByLastName(customer.getLastName()).isEmpty()){
                 customer_repository.save(customer);
             }
+        }
+        catch(Exception e) {
+            customer_repository.save(customer);
+        }
+
+
     };
 
     // GET CUSTOMER BY ID
     Customer getCustomer(long id){
         return customer_repository.findById(id);
+    };
+
+    // GET CUSTOMER BY CUSTOMER
+    List<Customer> getCustomer(Customer customer){
+        try {
+            return customer_repository.findByLastName(customer.getLastName());
+        }
+        catch(Exception e) {
+            return null;
+        }
+    }
+
+    // GET ALL CUSTOMERS
+    List<Customer> getCustomers(){
+        return (List<Customer>) customer_repository.findAll();
     };
 
     // GET CUSTOMER BY LAST NAME - Inside the class diagram referred to as "getCustomer(licence String)"
@@ -34,25 +61,31 @@ public class CustomerManagement {
         return customer.getTickets();
     }
 
-
-    // GET CUSTOMER TYPE
-    String getCustomer(Customer customer){
-
-        List<Customer> customer_list = customer_repository.findByLastName(customer.getLastName());
-
-        if (customer_list.isEmpty()){
-            return null;
-        } else {
-            return customer_list.get(0).getType();
-        }
-    };
-
-
-    // CONSTRUCTOR
-    CustomerManagement(TicketRepository ticket_repository, CustomerRepository customer_repository){
-        this.ticket_repository = ticket_repository;
-        this.customer_repository = customer_repository;
+    // SET STATUS MESSAGE
+    public String getStatus() {
+        return status;
     }
+
+    // GET STATUS MESSAGE
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+
+    // DELETE CUSTOMER
+    void deleteCustomerById(long id){
+        customer_repository.deleteById(id);
+    }
+
+
+    public Customer getCurrentCustomer() {
+        return currentCustomer;
+    }
+
+    public void setCurrentCustomer(Customer currentCustomer) {
+        this.currentCustomer = currentCustomer;
+    }
+
 
 
 }

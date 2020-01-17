@@ -19,6 +19,7 @@ public class Customer {
     private boolean blocked;
 	private String type;
 
+
 	@OneToMany
 	private List<Ticket> tickets;
 

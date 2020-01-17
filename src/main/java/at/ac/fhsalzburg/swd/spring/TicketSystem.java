@@ -1,19 +1,21 @@
 package at.ac.fhsalzburg.swd.spring;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class TicketSystem {
 
-    @Autowired //don't forget the setter
+    @Autowired
     private TicketRepository ticket_repository;
-    @Autowired //don't forget the setter
-    private CustomerRepository customerRepository;
 
     private int utilization;
     private int handicappedUtilization;
+    private String status;
+
 
 
     // GET UTILIZATION
@@ -29,6 +31,15 @@ public class TicketSystem {
         return new Ticket();
     };
 
+    // GET NEW TICKET - In class diagram referred to getNewTicket(customer Customer)
+    Ticket getTicket(long id){
+        return ticket_repository.findById(id);
+    };
+
+    // GET ALL TICKETS
+    List <Ticket> getTickets(){
+        return (List<Ticket>) ticket_repository.findAll();
+    }
 
     // GET HANDICAPPED UTILIZATION
     int getHandicappedUtilization(){
@@ -55,15 +66,29 @@ public class TicketSystem {
         this.utilization = utilization;
     }
 
+    // DELETE CUSTOMER
+    void deleteTicketById(long id){
+        ticket_repository.deleteById(id);
+    }
+
+    // STATUS
+    public String getStatus() {
+        return status;
+    }
+
+    // STATUS
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
 
     // CONSTRUCTORS
     TicketSystem(){
         this.handicappedUtilization = 0;
     }
 
-    TicketSystem(TicketRepository ticket_repository, CustomerRepository customer_repository){
+    TicketSystem(TicketRepository ticket_repository){
         this.ticket_repository = ticket_repository;
-        this.customerRepository = customer_repository;
     }
 
 

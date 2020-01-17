@@ -40,9 +40,7 @@
       <!-- nevigation menu of website layout -->
       <div class = "nav_menu">
           <a href="/">MAIN MENU</a>
-          <a href="manageCustomers">Manage Customers</a>
-          <a href="manageTickets">Manage Tickets</a>
-          <a href="managePayments">Manage Payments</a>
+          <a href="manageCustomers">Login / Register</a>
       </div>
 
 
@@ -50,25 +48,6 @@
       <div class = "row">
 
           <div class = "columnA">
-              <h2>Welcome</h2>
-          </div>
-
-          <div class = "columnB">
-              <h2>List of Customers</h2>
-              <br/><br/>
-              <table border="1">
-                  <tr>
-                      <th>First Name</th>
-                      <th>Last Name</th>
-                  </tr>
-                  <tr th:each ="customer : ${customers}">
-                      <td th:utext="${customer.firstName}">...</td>
-                      <td th:utext="${customer.lastName}">...</td>
-                  </tr>
-              </table>
-          </div>
-
-          <div class = "columnC">
               <h2>Technical Information</h2>
               <a>
                   <span th:text="'Singleton Bean, ' + ${beanSingleton}"></span>
@@ -82,6 +61,14 @@
                   <span th:text="'Session counter, ' + ${session.count.toString()}"></span>
                   <br>
               </a>
+          </div>
+
+          <div class = "columnB">
+
+          </div>
+
+          <div class = "columnC">
+
           </div>
 
       </div>

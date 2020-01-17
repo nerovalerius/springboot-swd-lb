@@ -49,6 +49,7 @@
 
         <div class = "columnA">
             <h2>Order Ticket</h2>
+             <h3 th:text="${statusMessageTicket}"></h3>
             <a>
                 <form th:action="@{/manageTickets}"
                       th:object="${ticketForm}" method="POST">
@@ -56,33 +57,35 @@
                     <input type="text" th:field="*{sqlFrom}" />
                     <br/>
                     Valid until:
-                    <input type="text" th:field="*{sqlTo}" />
-                    <br/>
+                    <input type="text" th:field="*{sqlTo}" /><br/>
+                    <br/><br/>
                     <input type="submit" value="Order Ticket" />
+
                 </form>
                 <br>
             </a>
         </div>
 
         <div class = "columnB">
-
-        </div>
-
-        <div class = "columnC">
             <h2>List of Tickets</h2>
-            <br/><br/>
             <table border="1">
                 <tr>
                     <th>Ticket Id</th>
                     <th>Valid from</th>
                     <th>Valid until</th>
+                    <th>Customer</th>
                 </tr>
                 <tr th:each ="ticket : ${tickets}">
                     <td th:utext="${ticket.id}">...</td>
-                    <td th:utext="${ticket.sqlFrom}">...</td>
+                    <td th:utext="${ticket.from}">...</td>
                     <td th:utext="${ticket.to}">...</td>
+                    <td th:utext="${ticket.customer}">...</td>
                 </tr>
             </table>
+        </div>
+
+        <div class = "columnC">
+
         </div>
 
     </div>

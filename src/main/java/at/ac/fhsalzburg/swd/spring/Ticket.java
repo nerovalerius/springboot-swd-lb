@@ -1,5 +1,7 @@
 package at.ac.fhsalzburg.swd.spring;
 
+import org.apache.tomcat.jni.Local;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -12,20 +14,12 @@ public class Ticket {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
 
-    private LocalDate sqlTo;		// Ich habe wirklich alles mögliche probiert.    @Temporal(TemporalType.TIMESTAMP)^...  @Temporal(TemporalType.DATE)...
-    private LocalDate sqlFrom;		// erst wenn das wort sql im variablen namen drinnen ist wird das sql statement korrekt erstellt, ansonsten gibt es eine hibernate h2 exception: expected identifier...
-	
-	
-	
-	public LocalDate getSqlDate() {
-		return Date;
-	}
+    private LocalDate sqlTo;		// ohne sql im variablen namen funktionierts nicht, exception...
+    private LocalDate sqlFrom;
 
-	public void setSqlDate(LocalDate sqlDate) {
-		this.Date = sqlDate;
-	}
+	@OneToOne
+	private Customer customer;
 
-	private LocalDate Date;
     private String type;
 
 
@@ -80,6 +74,24 @@ public class Ticket {
 		this.type = type;
 	}
 
+	public Customer getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
+	}
+
+	// CONSTRUCTORS
+	Ticket(Customer customer){
+    	this.customer = customer;
+	}
+
+	Ticket(LocalDate to, LocalDate from, Customer customer){
+		this.customer = customer;
+		this.sqlTo = to;
+		this.sqlFrom = from;
+	}
 
 
 

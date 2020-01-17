@@ -39,7 +39,6 @@
     <!-- nevigation menu of website layout -->
     <div class = "nav_menu">
         <a href="/">MAIN MENU</a>
-        <a href="manageCustomers">Manage Customers</a>
         <a href="manageTickets">Manage Tickets</a>
         <a href="managePayments">Manage Payments</a>
     </div>
@@ -48,7 +47,7 @@
     <div class = "row">
 
         <div class = "columnA">
-            <h2>Login</h2>
+            <h2>Login / Register Customer</h2>
             <a>
                 <form th:action="@{/manageCustomers}"
                       th:object="${customerForm}" method="POST">
@@ -57,33 +56,17 @@
                     <br/>
                     Last Name:
                     <input type="text" th:field="*{lastName}" />
-                    <br/>
-                    <input type="submit" value="Login" />
+                    <br/><br/>
+                    <input type="submit" value="Login / Register" />
+                    <br/><br/>
+                    <span style="text-align:center;font-size:20px" th:text="${statusMessageCustomer}"></span>
                 </form>
                 <br>
             </a>
         </div>
 
         <div class = "columnB">
-            <h2>Register </h2>
-            <a>
-                <form th:action="@{/manageCustomers}"
-                      th:object="${customerForm}" method="POST">
-                    First Name:
-                    <input type="text" th:field="*{firstName}" />
-                    <br/>
-                    Last Name:
-                    <input type="text" th:field="*{lastName}" />
-                    <br/>
-                    <input type="submit" value="Create Customer" />
-                </form>
-                <br>
-            </a>
-        </div>
-
-        <div class = "columnC">
             <h2>List of Customers</h2>
-            <br/><br/>
             <table border="1">
                 <tr>
                     <th>First Name</th>
@@ -94,6 +77,10 @@
                     <td th:utext="${customer.lastName}">...</td>
                 </tr>
             </table>
+        </div>
+
+        <div class = "columnC">
+
         </div>
 
 

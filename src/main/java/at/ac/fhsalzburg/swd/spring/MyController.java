@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@EnableJpaRepositories(basePackageClasses= {CustomerRepository.class, TicketRepository.class})
 public class MyController {
 
 	@Autowired
@@ -35,19 +34,15 @@ public class MyController {
 	@Autowired
 	TestServiceI testService;
 
-	@Autowired //don't forget the setter
-	private CustomerRepository customer_repository;
-
-	@Autowired //don't forget the setter
-	private TicketRepository ticket_repository;
-
-
 	@Autowired
 	TestBean singletonBean;
 
 	// Hier noch singleton
-	CustomerManagement customerManagement = new CustomerManagement(ticket_repository, customer_repository);
-	TicketSystem ticketSystem = new TicketSystem(ticket_repository, customer_repository);
+	@Autowired
+	CustomerManagement customerManagement;
+
+	@Autowired
+	TicketSystem ticketSystem;
 
 
 	@RequestMapping("/")
@@ -72,8 +67,11 @@ public class MyController {
 
 		model.addAttribute("halloNachricht","welcome to SWD lab");
 
-		model.addAttribute("customers", customer_repository.findAll());
-		model.addAttribute("tickets", ticket_repository.findAll());
+		Customer sepp = new Customer("dummy", "dummy");
+		customerManagement.addCustomer(sepp);
+
+		model.addAttribute("customers", customerManagement.getCustomers());
+		model.addAttribute("tickets", ticketSystem.getTickets());
 
 		model.addAttribute("beanSingleton", singletonBean.getHashCode());
 
@@ -93,7 +91,7 @@ public class MyController {
 	@RequestMapping(value = { "/manageCustomers" }, method = RequestMethod.POST)
 	public String addCustomer(Model model, //
 							  @ModelAttribute("customerForm") CustomerForm customerForm) {
-
+		customerManagement.setStatus("");
 		String firstName = customerForm.getFirstName();
 		String lastName = customerForm.getLastName();
 
@@ -101,25 +99,31 @@ public class MyController {
 		if (firstName != null && firstName.length() > 0 //
 				&& lastName != null && lastName.length() > 0) {
 			// Customer already in list?
-			if (customer_repository.findByLastName(lastName).isEmpty()){
+			if (customerManagement.getCustomer(lastName).isEmpty()){
 				Customer newCustomer = new Customer(firstName, lastName);
-				customer_repository.save(newCustomer);
+				customerManagement.addCustomer(newCustomer);
+				customerManagement.setCurrentCustomer(newCustomer);
+				customerManagement.setStatus("Successfully Logged in as " + firstName + " " + lastName);
+			} else {
+				customerManagement.setStatus("Customer already registered -> LOGIN");
 			}
-
+			return "redirect:/manageTickets";
 		}
 
-		return "redirect:/";
+		return "redirect:/manageCustomers";
 	}
 
 	@RequestMapping(value = { "/manageCustomers" }, method = RequestMethod.GET)
 	public String showAddPersonPage(Model model) {
 		CustomerForm customerForm = new CustomerForm();
 
-		model.addAttribute("customers", customer_repository.findAll());
-		model.addAttribute("tickets", ticket_repository.findAll());
+		model.addAttribute("customers", customerManagement.getCustomers());
+		model.addAttribute("tickets", ticketSystem.getTickets());
 
 		model.addAttribute("customerForm", customerForm);
 		model.addAttribute("message",testService.doSomething());
+		model.addAttribute("statusMessageCustomer", customerManagement.getStatus());
+
 
 		return "manageCustomers";
 	}
@@ -132,17 +136,20 @@ public class MyController {
 	public String orderTicket(Model model, //
 							  @ModelAttribute("ticketForm")TicketForm ticketForm) {
 
+		model.addAttribute("statusMessageTicket", customerManagement.getStatus());
+		model.addAttribute("currentCustomer", ticketSystem.getStatus());
+		model.addAttribute("tickets", ticketSystem.getTickets());
+
 		LocalDate to = ticketForm.getSqlTo();
 		LocalDate from = ticketForm.getSqlFrom();
+		Customer currentCustomer = customerManagement.getCurrentCustomer();
 
-		if (to != null  && from != null) {
-			Ticket ticket = new Ticket();
+		if (to.equals(null)  && from.equals(null)) {
+			Ticket ticket = new Ticket(to, from, currentCustomer);
 
 			// Calculate the difference in days
 			long days_difference = to.getDayOfYear() - from.getDayOfYear();
 			days_difference = TimeUnit.DAYS.convert(days_difference, TimeUnit.MILLISECONDS);
-			ticket.setFrom(from);
-			ticket.setTo(to);
 
 			// Longer than 5 days = permanent ticket
 			if (days_difference > 5){
@@ -151,12 +158,13 @@ public class MyController {
 				ticket.setType("non-permanent");
 			}
 
-				Ticket newCustomer = new Ticket(ticket);
-				ticket_repository.save(newCustomer);
-
+			ticketSystem.getNewTicket(ticket);
+			ticketSystem.setStatus(ticket.getCustomer().getFirstName());
+		} else {
+			ticketSystem.setStatus("ERROR: Ticket not created!");
 		}
 
-		return "redirect:/";
+		return "redirect:/manageTickets";
 	}
 
 
@@ -164,11 +172,14 @@ public class MyController {
 	public String showOrderTicketPage(Model model) {
 		TicketForm ticketForm = new TicketForm();
 
-		model.addAttribute("customers", customer_repository.findAll());
-		model.addAttribute("tickets", ticket_repository.findAll());
+		model.addAttribute("customers", customerManagement.getCustomers());
+		model.addAttribute("tickets", ticketSystem.getTickets());
 
 		model.addAttribute("ticketForm", ticketForm);
 		model.addAttribute("message",testService.doSomething());
+		model.addAttribute("statusMessageTicket", customerManagement.getStatus());
+		model.addAttribute("customerName", ticketSystem.getStatus());
+
 
 		return "manageTickets";
 	}
@@ -182,12 +193,12 @@ public class MyController {
 	@GetMapping("/customers")
 	public @ResponseBody List<Customer> allUsers() {
 
-		return (List<Customer>) customer_repository.findAll();
+		return (List<Customer>) customerManagement.getCustomers();
 	}
 
 	@RequestMapping(value = { "/customers/{id}" }, method = RequestMethod.GET)
 	public @ResponseBody Customer addCustomer(@PathVariable long id) {
-		Customer customer = customer_repository.findById(id);
+		Customer customer = customerManagement.getCustomer(id);
 
 		return customer;
 	}
@@ -195,7 +206,7 @@ public class MyController {
 	@RequestMapping(value = { "/customers/{id}" }, method = RequestMethod.PUT)
 	public String setCustomer(@RequestBody Customer customer) {
 
-		customer_repository.save(customer);
+		customerManagement.addCustomer(customer);
 
 		return "redirect:/customers";
 	}
@@ -203,7 +214,7 @@ public class MyController {
 	@DeleteMapping("/customers/{id}")
 	public String delete(@PathVariable String id) {
 		Long customerid = Long.parseLong(id);
-		customer_repository.deleteById(customerid);
+		customerManagement.deleteCustomerById(customerid);
 		return "redirect:/customers";
 	}
 
@@ -214,12 +225,12 @@ public class MyController {
 	@GetMapping("/tickets")
 	public @ResponseBody List<Ticket> allTickets() {
 
-		return (List<Ticket>) ticket_repository.findAll();
+		return (List<Ticket>) ticketSystem.getTickets();
 	}
 
 	@RequestMapping(value = { "/tickets/{id}" }, method = RequestMethod.GET)
 	public @ResponseBody Ticket addTicket(@PathVariable long id) {
-		Ticket ticket = ticket_repository.findById(id);
+		Ticket ticket = ticketSystem.getTicket(id);
 
 		return ticket;
 	}
@@ -227,7 +238,7 @@ public class MyController {
 	@RequestMapping(value = { "/tickets/{id}" }, method = RequestMethod.PUT)
 	public String setTicket(@RequestBody Ticket ticket) {
 
-		ticket_repository.save(ticket);
+		ticketSystem.getNewTicket(ticket);
 
 		return "redirect:/tickets";
 	}
@@ -235,7 +246,7 @@ public class MyController {
 	@DeleteMapping("/tickets/{id}")
 	public String deleteTicket(@PathVariable String id) {
 		Long ticketId = Long.parseLong(id);
-		ticket_repository.deleteById(ticketId);
+		ticketSystem.deleteTicketById(ticketId);
 		return "redirect:/tickets";
 	}
 

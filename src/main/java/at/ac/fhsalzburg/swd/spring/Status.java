@@ -1,5 +1,7 @@
 package at.ac.fhsalzburg.swd.spring;
 
+
+
 public class Status {
 
     public String currentUserFirstName;
@@ -7,6 +9,7 @@ public class Status {
     public String loginStatus;
     public String ticketStatus;
     public String ticketCustomer;
+    public boolean firstStart;
 
 
     Status(){

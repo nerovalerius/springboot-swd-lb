@@ -15,18 +15,15 @@ public class CustomerManagement {
     Customer currentCustomer;
 
     // ADD CUSTOMER
-    Customer addCustomer(Customer customer){
+    List <Customer> addCustomer(Customer customer){
         // Customer already in list?
         try {
             if (customer_repository.findByLastName(customer.getLastName()).isEmpty()){
                 customer_repository.save(customer);
+                return customer_repository.findByLastName(customer.getLastName());
             }
-        }
-        catch(Exception e) {
-            customer_repository.save(customer);
-        }
-
-       return customer;
+        } catch(Exception e) { }
+        return customer_repository.findByLastName(customer.getLastName());
     };
 
     // GET CUSTOMER BY ID

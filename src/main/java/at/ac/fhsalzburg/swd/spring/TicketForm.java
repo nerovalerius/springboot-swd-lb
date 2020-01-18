@@ -1,34 +1,44 @@
 package at.ac.fhsalzburg.swd.spring;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Locale;
+import java.time.format.DateTimeParseException;
+
 
 public class TicketForm {
 
     private LocalDate to;
     private LocalDate from;
-    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
     // GETTERS & SETTERS
     public LocalDate getSqlTo() {
         return to;
     }
 
-    public void setSqlTo(String to) throws ParseException {
-        formatter = formatter.withLocale(Locale.GERMAN );
-        this.to  = LocalDate.parse(to , formatter);
+    public boolean setSqlTo(String to) throws ParseException {
+        try {
+            this.to = LocalDate.parse(to, this.formatter);
+            return true;
+        } catch (DateTimeParseException e) {
+            this.to = null;
+            return false;
+        }
     }
- 
+
     public LocalDate getSqlFrom() {
         return from;
     }
- 
-    public void setLastName(String from) throws ParseException {
-        formatter = formatter.withLocale(Locale.GERMAN );
-        this.from  = LocalDate.parse(from , formatter);
+
+    public boolean setSqlFrom(String from) throws ParseException {
+        try {
+            this.from = LocalDate.parse(from, this.formatter);
+            return true;
+        } catch (DateTimeParseException e) {
+            this.from = null;
+            return false;
+        }
     }
      
 }

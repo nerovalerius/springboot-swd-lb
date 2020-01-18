@@ -1,6 +1,7 @@
 package at.ac.fhsalzburg.swd.spring;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -47,6 +48,7 @@ public class MyController {
 	Status status = new Status();
 
 
+
 	@RequestMapping("/")
 	public String index(Model model, HttpSession session) {
 
@@ -69,12 +71,6 @@ public class MyController {
 
 		model.addAttribute("halloNachricht","welcome to SWD lab");
 
-		Customer sepp = new Customer("dummy", "dummy");
-		customerManagement.addCustomer(sepp);
-
-		Ticket dummyTicket = new Ticket(LocalDate.now(), LocalDate.now(), "dummy");
-		ticketSystem.getNewTicket(dummyTicket);
-
 		model.addAttribute("customers", customerManagement.getCustomers());
 		model.addAttribute("tickets", ticketSystem.getTickets());
 
@@ -85,8 +81,21 @@ public class MyController {
 
 		model.addAttribute("beanSession", sessionBean.getHashCode());
 
-		//status.currentUserFirstName = "";
-		//status.currentUserLastName = "";
+
+		if (status.firstStart == true){
+			Customer sepp = new Customer("dummy", "dummy");
+			customerManagement.addCustomer(sepp);
+
+			Ticket dummyTicket = new Ticket(LocalDate.now(), LocalDate.now(), "dummy");
+			ticketSystem.getNewTicket(dummyTicket);
+			status.firstStart = false;
+		}
+
+
+
+
+		status.currentUserFirstName = "";
+		status.currentUserLastName = "";
 
 		return "index";
 	}
@@ -150,30 +159,45 @@ public class MyController {
 		model.addAttribute("tickets", ticketSystem.getTickets());
 		model.addAttribute("loginStatus",status.loginStatus);
 
+
 		LocalDate to = ticketForm.getSqlTo();
 		LocalDate from = ticketForm.getSqlFrom();
-		Customer currentCustomer = customerManagement.addCustomer(new Customer("sepp", "depp"));
 
-		//if (to.equals(null)  && from.equals(null)) {
+		Customer currentCustomer = new Customer(status.currentUserFirstName, status.currentUserLastName);
+
+		// See if customer is already in list, if not then create
+		if(customerManagement.addCustomer(currentCustomer).isEmpty()){
+			List<Customer> customerList = customerManagement.getCustomer(status.currentUserLastName);
+			for (Customer customer : customerList){
+				if (customer.getFirstName() == currentCustomer.getFirstName()){
+					currentCustomer = customer;
+				}
+			}
+
+
+
+		}
+
+		// CHECK IF GIVE DATE IS VALID
+		if (to != null && from != null) {
 			Ticket ticket = new Ticket(to, from, currentCustomer);
-/*
-			// Calculate the difference in days
-			long days_difference = to.getDayOfYear() - from.getDayOfYear();
-			days_difference = TimeUnit.DAYS.convert(days_difference, TimeUnit.MILLISECONDS);
 
-			// Longer than 5 days = permanent ticket
-			if (days_difference > 5){
+			// Calculate the difference in days
+			long days_difference = ChronoUnit.DAYS.between(from, to);
+
+			// Longer than 2 days = permanent ticket
+			if (days_difference > 2){
 				ticket.setType("permanent");
 			} else {
 				ticket.setType("non-permanent");
 			}
-*/
+
 			ticketSystem.getNewTicket(ticket);
 			status.ticketCustomer = currentCustomer.getFirstName() + currentCustomer.getLastName();
 			status.ticketStatus = ("Ticket successfully created!");
-		//} else {
-		//	status.ticketStatus = ("ERROR: Ticket not created!");
-		//}
+		} else {
+			status.ticketStatus = ("ERROR: Ticket not created! - Date must be in format dd.MM.yyyy");
+		}
 
 		return "redirect:/manageTickets";
 	}

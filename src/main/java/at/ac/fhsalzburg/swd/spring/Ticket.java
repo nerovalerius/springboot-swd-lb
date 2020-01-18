@@ -17,11 +17,13 @@ public class Ticket {
     private LocalDate sqlTo;		// ohne sql im variablen namen funktionierts nicht, exception...
     private LocalDate sqlFrom;
 
-    @OneToOne
+	@OneToOne(fetch = FetchType.LAZY,
+			cascade =  CascadeType.ALL)
 	private Customer customer;
 
-    private String type;
-
+	private String type;
+	private String firstName;
+	private String lastName;
 
     // CONSTRUCTORS
     protected Ticket() {}
@@ -80,20 +82,47 @@ public class Ticket {
 
 	public void setCustomer(Customer customer) {
 		this.customer = customer;
+		this.firstName = customer.getFirstName();
+		this.lastName = customer.getLastName();
 	}
+
+
+	public String getFirstName() {
+		return this.firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return this.lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
 
 	// CONSTRUCTORS
 	Ticket(Customer customer){
-    	this.customer = customer;
+		this.customer = customer;
+		this.firstName = customer.getFirstName();
+		this.lastName = customer.getLastName();
 	}
 
 	Ticket(LocalDate to, LocalDate from, Customer customer){
 		this.customer = customer;
+		this.firstName = customer.getFirstName();
+		this.lastName = customer.getLastName();
 		this.sqlTo = to;
 		this.sqlFrom = from;
 	}
 
-
+	Ticket(LocalDate to, LocalDate from){
+		this.sqlTo = to;
+		this.sqlFrom = from;
+	}
 
     /*
     @Override

@@ -32,15 +32,12 @@
     <div class = "header">
         <h1>Best Parking Ever</h1>
         </br>
-        <h1>MANAGE TICKETS</h1>
-        <span th:text="${halloNachricht}"></span>
+        <h1>Logout</h1>
     </div>
 
     <!-- nevigation menu of website layout -->
     <div class = "nav_menu">
         <a href="/">MAIN MENU</a>
-        <a href="manageCustomers">Manage Customers</a>
-        <a href="manageTickets">Manage Tickets</a>
         <a href="managePayments">Manage Payments</a>
     </div>
 
@@ -49,7 +46,12 @@
 
         <div class = "columnA">
             <h2>Order Ticket</h2>
-             <h3 th:text="${ticketStatus}"></h3>
+            <h3 th:text="${ticketStatus}"></h3>
+            <h3>
+                <span style="text-align:center;font-size:20px" th:text="${currentUser}"></span>
+                <span style="text-align:center;font-size:20px" th:text="${loginStatus}"></span>
+            </h3>
+
             <a>
                 <form th:action="@{/manageTickets}"
                       th:object="${ticketForm}" method="POST">
@@ -58,13 +60,12 @@
                     <br/>
                     Valid until:
                     <input type="text" th:field="*{sqlTo}" /><br/>
-                    <br/><br/>
+                    <br/>
                     <input type="submit" value="Order Ticket" />
-                    <br/><br/>
-                    <span style="text-align:center;font-size:20px" th:text="${currentUser}"></span>
-                    <span style="text-align:center;font-size:20px" th:text="${loginStatus}"></span>
-
                 </form>
+                <br/>
+                <a href="/"><button>Logout</button></a>
+
                 <br>
             </a>
         </div>
@@ -74,22 +75,23 @@
             <table border="1">
                 <tr>
                     <th>Ticket Id</th>
+                    <th>Ticket Type</th>
                     <th>Valid from</th>
                     <th>Valid until</th>
-                    <th>Customer</th>
+                    <th>Customer first name</th>
+                    <th>Customer last name</th>
                 </tr>
                 <tr th:each ="ticket : ${tickets}">
                     <td th:utext="${ticket.id}">...</td>
+                    <td th:utext="${ticket.type}">...</td>
                     <td th:utext="${ticket.from}">...</td>
                     <td th:utext="${ticket.to}">...</td>
-                    <td th:utext="${ticket.customer}">...</td>
+                    <td th:utext="${ticket.firstName}">...</td>
+                    <td th:utext="${ticket.lastName}">...</td>
                 </tr>
             </table>
         </div>
 
-        <div class = "columnC">
-
-        </div>
 
     </div>
 

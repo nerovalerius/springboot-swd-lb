@@ -64,11 +64,17 @@
           </div>
 
           <div class = "columnB">
-
-          </div>
-
-          <div class = "columnC">
-
+              <h2>List of Customers</h2>
+              <table border="1">
+                  <tr>
+                      <th>First Name</th>
+                      <th>Last Name</th>
+                  </tr>
+                  <tr th:each ="customer : ${customers}">
+                      <td th:utext="${customer.firstName}">...</td>
+                      <td th:utext="${customer.lastName}">...</td>
+                  </tr>
+              </table>
           </div>
 
       </div>

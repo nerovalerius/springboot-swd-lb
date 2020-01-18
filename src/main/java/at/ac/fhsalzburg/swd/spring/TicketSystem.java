@@ -25,6 +25,16 @@ public class TicketSystem {
 
     // GET NEW TICKET - In class diagram referred to getNewTicket(customer Customer)
     Ticket getNewTicket(Ticket ticket){
+        // Ticket already in list?
+        try {
+            if (ticket_repository.findById(ticket.getId()).isEmpty()){
+                ticket_repository.save(ticket);
+            }
+        }
+        catch(Exception e) {
+            ticket_repository.save(ticket);
+        }
+
         ticket_repository.save(ticket);
         //return ticket_repository.findByTicket(ticket);
         return new Ticket();

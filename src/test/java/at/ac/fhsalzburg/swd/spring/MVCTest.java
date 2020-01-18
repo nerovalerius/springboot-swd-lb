@@ -17,17 +17,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 public class MVCTest{
+
     @Autowired
     private MockMvc mvc;                //MVC mock object
-@Autowired
-    MyController myController;
-@Test
-public void givenNothing_whenHome_thenIndex()   throws Exception {
-    mvc.perform(MockMvcRequestBuilders.get("/") // request root directory
-            .contentType(MediaType.TEXT_HTML))  // check if content is HTML
-            .andExpect(status().isOk())         // check if HTTP 200 (OK)
-            .andExpect(model().attributeExists("customers")) // check model attributes
-            .andExpect(view().name("index"))// check delivered view
-            ;
-    }
+
+    @Autowired
+        MyController myController;
+
+    @Test
+    public void givenNothing_whenHome_thenIndex()   throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/") // request root directory
+                .contentType(MediaType.TEXT_HTML))  // check if content is HTML
+                .andExpect(status().isOk())         // check if HTTP 200 (OK)
+                .andExpect(model().attributeExists("customers")) // check model attributes
+                .andExpect(view().name("index"))// check delivered view
+                ;
+        }
 }

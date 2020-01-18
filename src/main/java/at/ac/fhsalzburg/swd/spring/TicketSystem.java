@@ -14,7 +14,6 @@ public class TicketSystem {
 
     private int utilization;
     private int handicappedUtilization;
-    private String status;
 
 
 
@@ -69,16 +68,6 @@ public class TicketSystem {
     // DELETE CUSTOMER
     void deleteTicketById(long id){
         ticket_repository.deleteById(id);
-    }
-
-    // STATUS
-    public String getStatus() {
-        return status;
-    }
-
-    // STATUS
-    public void setStatus(String status) {
-        this.status = status;
     }
 
 

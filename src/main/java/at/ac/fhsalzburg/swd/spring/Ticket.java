@@ -17,7 +17,7 @@ public class Ticket {
     private LocalDate sqlTo;		// ohne sql im variablen namen funktionierts nicht, exception...
     private LocalDate sqlFrom;
 
-	@OneToOne
+    @OneToOne
 	private Customer customer;
 
     private String type;
@@ -62,8 +62,8 @@ public class Ticket {
 		return sqlFrom;
 	}
 
-	public void setFrom(LocalDate From) {
-		this.sqlFrom = From;
+	public void setFrom(LocalDate from) {
+		this.sqlFrom = from;
 	}
 
 	public String getType() {

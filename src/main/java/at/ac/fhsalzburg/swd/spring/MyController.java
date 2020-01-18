@@ -44,6 +44,8 @@ public class MyController {
 	@Autowired
 	TicketSystem ticketSystem;
 
+	Status status = new Status();
+
 
 	@RequestMapping("/")
 	public String index(Model model, HttpSession session) {
@@ -70,6 +72,9 @@ public class MyController {
 		Customer sepp = new Customer("dummy", "dummy");
 		customerManagement.addCustomer(sepp);
 
+		Ticket dummyTicket = new Ticket(LocalDate.now(), LocalDate.now(), "dummy");
+		ticketSystem.getNewTicket(dummyTicket);
+
 		model.addAttribute("customers", customerManagement.getCustomers());
 		model.addAttribute("tickets", ticketSystem.getTickets());
 
@@ -80,6 +85,8 @@ public class MyController {
 
 		model.addAttribute("beanSession", sessionBean.getHashCode());
 
+		//status.currentUserFirstName = "";
+		//status.currentUserLastName = "";
 
 		return "index";
 	}
@@ -91,7 +98,8 @@ public class MyController {
 	@RequestMapping(value = { "/manageCustomers" }, method = RequestMethod.POST)
 	public String addCustomer(Model model, //
 							  @ModelAttribute("customerForm") CustomerForm customerForm) {
-		customerManagement.setStatus("");
+		status.currentUserFirstName = "";
+		status.currentUserLastName = "";
 		String firstName = customerForm.getFirstName();
 		String lastName = customerForm.getLastName();
 
@@ -103,10 +111,12 @@ public class MyController {
 				Customer newCustomer = new Customer(firstName, lastName);
 				customerManagement.addCustomer(newCustomer);
 				customerManagement.setCurrentCustomer(newCustomer);
-				customerManagement.setStatus("Successfully Logged in as " + firstName + " " + lastName);
+				status.loginStatus = " created and logged in";
 			} else {
-				customerManagement.setStatus("Customer already registered -> LOGIN");
+				status.loginStatus = " logged in";
 			}
+			status.currentUserFirstName = firstName;
+			status.currentUserLastName = lastName;
 			return "redirect:/manageTickets";
 		}
 
@@ -122,8 +132,6 @@ public class MyController {
 
 		model.addAttribute("customerForm", customerForm);
 		model.addAttribute("message",testService.doSomething());
-		model.addAttribute("statusMessageCustomer", customerManagement.getStatus());
-
 
 		return "manageCustomers";
 	}
@@ -136,17 +144,19 @@ public class MyController {
 	public String orderTicket(Model model, //
 							  @ModelAttribute("ticketForm")TicketForm ticketForm) {
 
-		model.addAttribute("statusMessageTicket", customerManagement.getStatus());
-		model.addAttribute("currentCustomer", ticketSystem.getStatus());
+
+		model.addAttribute("ticketStatus", status.ticketStatus);
+		model.addAttribute("currentUser", status.currentUserFirstName + " " + status.currentUserLastName);
 		model.addAttribute("tickets", ticketSystem.getTickets());
+		model.addAttribute("loginStatus",status.loginStatus);
 
 		LocalDate to = ticketForm.getSqlTo();
 		LocalDate from = ticketForm.getSqlFrom();
-		Customer currentCustomer = customerManagement.getCurrentCustomer();
+		Customer currentCustomer = customerManagement.addCustomer(new Customer("sepp", "depp"));
 
-		if (to.equals(null)  && from.equals(null)) {
+		//if (to.equals(null)  && from.equals(null)) {
 			Ticket ticket = new Ticket(to, from, currentCustomer);
-
+/*
 			// Calculate the difference in days
 			long days_difference = to.getDayOfYear() - from.getDayOfYear();
 			days_difference = TimeUnit.DAYS.convert(days_difference, TimeUnit.MILLISECONDS);
@@ -157,12 +167,13 @@ public class MyController {
 			} else {
 				ticket.setType("non-permanent");
 			}
-
+*/
 			ticketSystem.getNewTicket(ticket);
-			ticketSystem.setStatus(ticket.getCustomer().getFirstName());
-		} else {
-			ticketSystem.setStatus("ERROR: Ticket not created!");
-		}
+			status.ticketCustomer = currentCustomer.getFirstName() + currentCustomer.getLastName();
+			status.ticketStatus = ("Ticket successfully created!");
+		//} else {
+		//	status.ticketStatus = ("ERROR: Ticket not created!");
+		//}
 
 		return "redirect:/manageTickets";
 	}
@@ -177,8 +188,10 @@ public class MyController {
 
 		model.addAttribute("ticketForm", ticketForm);
 		model.addAttribute("message",testService.doSomething());
-		model.addAttribute("statusMessageTicket", customerManagement.getStatus());
-		model.addAttribute("customerName", ticketSystem.getStatus());
+		model.addAttribute("ticketStatus", status.ticketStatus);
+		model.addAttribute("ticketCustomer", status.ticketCustomer);
+		model.addAttribute("loginStatus",status.loginStatus);
+		model.addAttribute("currentUser", status.currentUserFirstName + " " + status.currentUserLastName);
 
 
 		return "manageTickets";

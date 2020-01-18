@@ -1,11 +1,10 @@
 package at.ac.fhsalzburg.swd.spring;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CustomerManagement {
@@ -13,11 +12,10 @@ public class CustomerManagement {
     @Autowired
     private CustomerRepository customer_repository;
 
-    String status;
     Customer currentCustomer;
 
     // ADD CUSTOMER
-    void addCustomer(Customer customer){
+    Customer addCustomer(Customer customer){
         // Customer already in list?
         try {
             if (customer_repository.findByLastName(customer.getLastName()).isEmpty()){
@@ -28,7 +26,7 @@ public class CustomerManagement {
             customer_repository.save(customer);
         }
 
-
+       return customer;
     };
 
     // GET CUSTOMER BY ID
@@ -38,12 +36,7 @@ public class CustomerManagement {
 
     // GET CUSTOMER BY CUSTOMER
     List<Customer> getCustomer(Customer customer){
-        try {
-            return customer_repository.findByLastName(customer.getLastName());
-        }
-        catch(Exception e) {
-            return null;
-        }
+        return customer_repository.findByLastName(customer.getLastName());
     }
 
     // GET ALL CUSTOMERS
@@ -59,16 +52,6 @@ public class CustomerManagement {
     // GET TICKETS OF CUSTOMER
     List<Ticket> getTicketsOfCustomer(Customer customer){
         return customer.getTickets();
-    }
-
-    // SET STATUS MESSAGE
-    public String getStatus() {
-        return status;
-    }
-
-    // GET STATUS MESSAGE
-    public void setStatus(String status) {
-        this.status = status;
     }
 
 

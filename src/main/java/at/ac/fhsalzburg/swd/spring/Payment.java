@@ -13,7 +13,6 @@ import java.util.List;
 @Entity
 public class Payment {
 
-
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;

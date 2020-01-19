@@ -19,6 +19,9 @@ public interface CustomerRepository extends CrudRepository<Customer, Long> {
 
 	@Transactional(timeout = 10)
 	Customer findById(long id);
+
+	@Transactional(timeout = 10)
+	Customer findByLicensePlates(String licensePlates);
 	
 	//@Transactional(timeout = 10)
 	//@Override

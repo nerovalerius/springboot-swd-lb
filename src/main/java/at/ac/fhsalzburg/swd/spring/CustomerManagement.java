@@ -30,15 +30,16 @@ public class CustomerManagement {
         return customer_repository.findById(id);
     };
 
-    // GET CUSTOMER BY CUSTOMER
-    List<Customer> getCustomer(Customer customer){
-        return customer_repository.findByLastName(customer.getLastName());
+    // GET CUSTOMER BY LICENSE PLATES
+    Customer getCustomer(String licensePlates) {
+        return customer_repository.findByLicensePlates(licensePlates);
     }
 
     // GET ALL CUSTOMERS
     List<Customer> getCustomers(){
         return (List<Customer>) customer_repository.findAll();
     };
+
 
     // GET CUSTOMER BY NAME - Inside the class diagram referred to as "getCustomer(licence String)"
     Customer getCustomer(String firstName, String lastName){
@@ -57,6 +58,16 @@ public class CustomerManagement {
         }
 
         return null;
+    }
+
+    // GET TICKETS OF CUSTOMER - NOT IMPLEMENTED AS REFERRED TO CLASS DIAGRAM
+
+
+    // GET CUSTOMER TYPE
+    String getCustomerType(Customer customer){
+        long id = customer.getId();
+        Customer tempCustomer = customer_repository.findById(id);
+        return tempCustomer.getType();
     }
 
 

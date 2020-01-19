@@ -40,21 +40,20 @@ public class TicketSystem {
         return new Ticket();
     };
 
-    // GET NEW TICKET - In class diagram referred to getNewTicket(customer Customer)
-    Ticket getTicket(long id){
-        return ticket_repository.findById(id);
-    };
-
-    // GET ALL TICKETS
-    List <Ticket> getTickets(){
-        return (List<Ticket>) ticket_repository.findAll();
-    }
-
     // GET HANDICAPPED UTILIZATION
     int getHandicappedUtilization(){
         return this.handicappedUtilization;
     }
 
+    // GET NEW TICKET - In class diagram referred to getNewTicket(customer Customer)
+    Ticket getTicket(long id){
+        return ticket_repository.findById(id);
+    };
+
+    // GET ALL TICKETS                                                          // NOT IN CLASS DIAGRAM
+    List <Ticket> getTickets(){
+        return (List<Ticket>) ticket_repository.findAll();
+    }
 
     // VERIFY TICKET
     boolean verifyTicket(Ticket ticket){

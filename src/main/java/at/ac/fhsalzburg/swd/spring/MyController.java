@@ -84,17 +84,38 @@ public class MyController {
 
 		model.addAttribute("beanSession", sessionBean.getHashCode());
 
-		/*
+		// FILL STUFF WITH VALUES
 		if (status.firstStart == true){
-			Customer sepp = new Customer("dummy", "dummy");
-			customerManagement.addCustomer(sepp);
 
-			Ticket dummyTicket = new Ticket(LocalDate.now(), LocalDate.now(), "dummy");
+			// CUSTOMER
+			Customer customer1 = new Customer("ALAN", "TURING");
+			customerManagement.addCustomer(customer1);
+
+
+			Customer customer2= new Customer("DUKE", "NUKEM");
+			customerManagement.addCustomer(customer2);
+
+			// TICKETS
+			Ticket dummyTicket = new Ticket(LocalDate.now().plusDays(1), LocalDate.now(), customer1);
 			ticketSystem.getNewTicket(dummyTicket);
+			long id = dummyTicket.getId();
+
+			Ticket dummyTicket2 = new Ticket(LocalDate.now().plusDays(3), LocalDate.now(), customer2);
+			ticketSystem.getNewTicket(dummyTicket2);
+			long id2 = dummyTicket2.getId();
+
+			// PAYMENTS
+			Payment dummyPayment = new Payment(9.5, LocalDate.now(), (int) id, "Paypal");
+			Payment dummyPayment2 = new Payment(9.0, LocalDate.now(), (int) id, "Paypal");
+
+			// TICKET PAYMENT
+			ticketSystem.payTicket(dummyPayment, id);
+			ticketSystem.payTicket(dummyPayment2, id2);
+
 			status.firstStart = false;
 		}
 
-		*/
+
 
 
 		status.currentUserFirstName = "";
@@ -182,16 +203,6 @@ public class MyController {
 		// CHECK IF GIVE DATE IS VALID
 		if (to != null && from != null) {
 			Ticket ticket = new Ticket(to, from, currentCustomer);
-
-			// Calculate the difference in days
-			long days_difference = ChronoUnit.DAYS.between(from, to);
-
-			// Longer than 2 days = permanent ticket
-			if (days_difference > 2){
-				ticket.setType("permanent");
-			} else {
-				ticket.setType("non-permanent");
-			}
 
 			ticketSystem.getNewTicket(ticket);
 			status.ticketCustomer = currentCustomer.getFirstName() + currentCustomer.getLastName();

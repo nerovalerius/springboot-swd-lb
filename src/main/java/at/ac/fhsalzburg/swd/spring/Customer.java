@@ -18,8 +18,7 @@ public class Customer {
 	private String licensePlates;
     private boolean blocked;
 	private String type;
-
-
+											// NO TICKETS IMPLEMENTED AS REFERRED TO IN CLASS DIAGRAM
 	// FUNCTIONS
 	boolean block(boolean newState){
 		this.blocked = newState;

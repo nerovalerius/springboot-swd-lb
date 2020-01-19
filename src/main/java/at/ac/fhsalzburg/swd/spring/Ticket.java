@@ -15,22 +15,22 @@ public class Ticket {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
 
-    private LocalDate sqlTo;		// ohne sql im variablen namen funktionierts nicht, exception...
+    private LocalDate sqlTo;		// HIBERNATE ERROR WHEN NAME WITHOUT SQL IN IT - CLASS DIAGRAMM IS JUST (TO,FROM)
     private LocalDate sqlFrom;
 
 	@OneToOne(fetch = FetchType.LAZY,
 			cascade =  CascadeType.ALL)
-	private Customer customer;
+	private Customer customer;		// TO WHICH CUSTOMER DOES THIS TICKET BELONG? NOT IN CLASS DIAGRAM
 
 	@OneToOne(fetch = FetchType.LAZY,
 			cascade =  CascadeType.ALL)
-	private Payment payment;
+	private Payment payment;		// WHAT PAYMENT FULLY PAID THE TICKET? NOT IN CLASS DIAGRAM
 
-	private double price;
-	private double outstanding_payment;
-	private String type;
-	private String paymentMethod;
-	private boolean paid;
+	private double price;			// MAKES SENSE - NOT IN CLASS DIAGRAM
+	private double outstanding_payment;				// NOT IN CLASS DIAGRAM BUT MAKES SENSE
+	private String type;			// MAKES SENSE - NOT IN CLASS DIAGRAM
+	private String paymentMethod;	// MAKES SENSE - NOT IN CLASS DIAGRAM
+	private boolean paid;			// MAKES SENSE - NOT IN CLASS DIAGRAM
 
 
 	// GETTERS & SETTERS
@@ -156,6 +156,16 @@ public class Ticket {
 		this.price = calculatePrice(to, from);
 		this.outstanding_payment = this.price;
 		this.paid = false;
+
+		// Calculate the difference in days
+		long days_difference = ChronoUnit.DAYS.between(from, to);
+
+		// Longer than 2 days = permanent ticket
+		if (days_difference > 2){
+			this.setType("permanent");
+		} else {
+			this.setType("non-permanent");
+		}
 	}
 
 	protected Ticket() {}

@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class TicketSystem {
+public class TicketSystem {  // By default Service annotation creates a singleton scoped bean - SINGLETON IS USED HERE
 
     @Autowired
     private TicketRepository ticket_repository;

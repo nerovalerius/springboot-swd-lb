@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Service
-public class PaymentProvider {
+public class PaymentProvider {  // By default Service annotation creates a singleton scoped bean - SINGLETON IS USED HERE
 
     // VARIABLES
     @Autowired

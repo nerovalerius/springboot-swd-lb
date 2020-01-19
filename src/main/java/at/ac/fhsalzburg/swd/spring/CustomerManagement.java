@@ -6,8 +6,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+
+
 @Service
-public class CustomerManagement {
+public class CustomerManagement {  // By default Service annotation creates a singleton scoped bean - SINGLETON IS USED HERE
 
     @Autowired
     private CustomerRepository customer_repository;

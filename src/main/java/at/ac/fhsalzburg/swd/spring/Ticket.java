@@ -22,10 +22,15 @@ public class Ticket {
 			cascade =  CascadeType.ALL)
 	private Customer customer;
 
+	@OneToOne(fetch = FetchType.LAZY,
+			cascade =  CascadeType.ALL)
+	private Payment payment;
+
 	private double price;
+	private double outstanding_payment;
 	private String type;
-	private String firstName;
-	private String lastName;
+	private String paymentMethod;
+	private boolean paid;
 
 
 	// GETTERS & SETTERS
@@ -67,24 +72,23 @@ public class Ticket {
 
 	public void setCustomer(Customer customer) {
 		this.customer = customer;
-		this.firstName = customer.getFirstName();
-		this.lastName = customer.getLastName();
+
 	}
 
 	public String getFirstName() {
-		return this.firstName;
+		return this.customer.getFirstName();
 	}
 
 	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+		this.customer.setFirstName(firstName);
 	}
 
 	public String getLastName() {
-		return this.lastName;
+		return this.customer.getLastName();
 	}
 
 	public void setLastName(String lastName) {
-		this.lastName = lastName;
+		this.customer.setLastName(lastName);
 	}
 
 	public double getPrice() {
@@ -93,6 +97,39 @@ public class Ticket {
 
 	public void setPrice(double price) {
 		this.price = price;
+	}
+
+	public Payment getPayment() {
+		return payment;
+	}
+
+	public void setPayment(Payment payment) {
+		this.outstanding_payment -= payment.getAmount();
+		this.payment = payment;
+		this.paymentMethod = payment.getPaymentMethod();
+
+		if (outstanding_payment <= 0) {
+			this.paid = true;
+		} else {
+			this.paid = false;
+		}
+
+	}
+
+	public boolean getPaid() {
+		return paid;
+	}
+
+	public double getOutstanding_payment() {
+		return outstanding_payment;
+	}
+
+	public String getPaymentMethod() {
+		return paymentMethod;
+	}
+
+	public void setPaymentMethod(String paymentMethod) {
+		this.paymentMethod = paymentMethod;
 	}
 
 
@@ -112,11 +149,13 @@ public class Ticket {
 	// CONSTRUCTORS
 	public Ticket(LocalDate to, LocalDate from, Customer customer){
 		this.customer = customer;
-		this.firstName = customer.getFirstName();
-		this.lastName = customer.getLastName();
+		this.customer.setFirstName(customer.getFirstName());
+		this.customer.setLastName(customer.getLastName());
 		this.sqlTo = to;
 		this.sqlFrom = from;
 		this.price = calculatePrice(to, from);
+		this.outstanding_payment = this.price;
+		this.paid = false;
 	}
 
 	protected Ticket() {}

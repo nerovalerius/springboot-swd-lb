@@ -2,16 +2,14 @@ package at.ac.fhsalzburg.swd.spring;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -42,12 +40,16 @@ public class MyController {
 	@Autowired
 	CustomerManagement customerManagement;
 
+	// Hier noch singleton
 	@Autowired
 	TicketSystem ticketSystem;
 
+	// Hier noch singleton
+	@Autowired
+	PaymentProvider paymentProvider;
+
+	// STATUS MESSAGES
 	Status status = new Status();
-
-
 
 	@RequestMapping("/")
 	public String index(Model model, HttpSession session) {
@@ -73,6 +75,7 @@ public class MyController {
 
 		model.addAttribute("customers", customerManagement.getCustomers());
 		model.addAttribute("tickets", ticketSystem.getTickets());
+		model.addAttribute("payments", paymentProvider.getPayments());
 
 		model.addAttribute("beanSingleton", singletonBean.getHashCode());
 
@@ -105,7 +108,7 @@ public class MyController {
 	 ***********************************************************************/
 
 	@RequestMapping(value = { "/manageCustomers" }, method = RequestMethod.POST)
-	public String addCustomer(Model model, //
+	public String manageCustomer(Model model, //
 							  @ModelAttribute("customerForm") CustomerForm customerForm) {
 		status.currentUserFirstName = "";
 		status.currentUserLastName = "";
@@ -132,7 +135,7 @@ public class MyController {
 	}
 
 	@RequestMapping(value = { "/manageCustomers" }, method = RequestMethod.GET)
-	public String showAddPersonPage(Model model) {
+	public String showManageCustomersPage(Model model) {
 		CustomerForm customerForm = new CustomerForm();
 
 		model.addAttribute("customers", customerManagement.getCustomers());
@@ -149,7 +152,7 @@ public class MyController {
 	 ***********************************************************************/
 
 	@RequestMapping(value = { "/manageTickets" }, method = RequestMethod.POST)
-	public String orderTicket(Model model, //
+	public String manageTicket(Model model, //
 							  @ModelAttribute("ticketForm")TicketForm ticketForm) {
 
 
@@ -202,7 +205,7 @@ public class MyController {
 
 
 	@RequestMapping(value = { "/manageTickets" }, method = RequestMethod.GET)
-	public String showOrderTicketPage(Model model) {
+	public String showManageTicketPage(Model model) {
 		TicketForm ticketForm = new TicketForm();
 
 		model.addAttribute("customers", customerManagement.getCustomers());
@@ -217,6 +220,61 @@ public class MyController {
 
 
 		return "manageTickets";
+	}
+
+
+	/***********************************************************************
+	 PAYMENTS
+	 ***********************************************************************/
+
+	@RequestMapping(value = { "/managePayments" }, method = RequestMethod.POST)
+	public String managePayment(Model model, //
+							  @ModelAttribute("paymentForm")PaymentForm paymentForm) {
+
+		model.addAttribute("currentUser", status.currentUserFirstName + " " + status.currentUserLastName);
+		model.addAttribute("payments", paymentProvider.getPayments());
+		model.addAttribute("loginStatus",status.loginStatus);
+
+
+		LocalDate date = LocalDate.now();
+		double amount = paymentForm.getAmount();
+		int ticketId = paymentForm.getTicketId();
+		String paymentMethod = paymentForm.getPaymentMethod();
+
+		if(status.currentUserFirstName.equals("") || status.currentUserLastName.equals("")){
+
+			status.ticketStatus = ("ERROR: Ticket not created - No User logged in!");
+			return "redirect:/managePayments";
+		}
+
+		// CREATE PAYMENT
+		Payment currentPayment = new Payment(amount, date, ticketId, paymentMethod);
+		paymentProvider.getNewPayment(currentPayment);
+
+		Ticket currentTicket = ticketSystem.getTicket(ticketId);
+
+		// no ticket with this id
+		if (currentTicket == null){
+			status.paymentStatus = ("ERROR: Ticket not paid! - No Ticket with this id!");
+		} else {
+			ticketSystem.payTicket(currentPayment, ticketId);
+			status.paymentStatus = ("Ticket successfully paid!");
+		}
+
+		return "redirect:/managePayments";
+	}
+
+
+	@RequestMapping(value = { "/managePayments" }, method = RequestMethod.GET)
+	public String showManagePaymentsPage(Model model) {
+		PaymentForm paymentForm = new PaymentForm();
+
+		model.addAttribute("payments", paymentProvider.getPayments());
+		model.addAttribute("paymentStatus", status.paymentStatus);
+		model.addAttribute("currentUser", status.currentUserFirstName + " " + status.currentUserLastName);
+		model.addAttribute("paymentForm", paymentForm);
+
+		return "managePayments";
 	}
 
 
@@ -285,6 +343,38 @@ public class MyController {
 		return "redirect:/tickets";
 	}
 
+
+	/***********************************************************************
+	 REST MAPPING PAYMENTS
+	 ***********************************************************************/
+
+	@GetMapping("/payments")
+	public @ResponseBody List<Payment> allPayments() {
+
+		return (List<Payment>) paymentProvider.getPayments();
+	}
+
+	@RequestMapping(value = { "/payments/{id}" }, method = RequestMethod.GET)
+	public @ResponseBody Payment addPayment(@PathVariable long id) {
+		Payment Payment = paymentProvider.getPayment(id);
+
+		return Payment;
+	}
+
+	@RequestMapping(value = { "/payments/{id}" }, method = RequestMethod.PUT)
+	public String setPayment(@RequestBody Payment Payment) {
+
+		paymentProvider.getNewPayment(Payment);
+
+		return "redirect:/payments";
+	}
+
+	@DeleteMapping("/payments/{id}")
+	public String deletePayment(@PathVariable String id) {
+		Long PaymentId = Long.parseLong(id);
+		paymentProvider.deletePaymentById(PaymentId);
+		return "redirect:/payments";
+	}
 
 }
 

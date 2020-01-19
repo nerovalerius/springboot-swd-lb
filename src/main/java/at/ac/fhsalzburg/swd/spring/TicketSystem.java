@@ -65,6 +65,12 @@ public class TicketSystem {
         return (returned_ticket.getId() == ticket.getId());
     }
 
+    // ADD PAYMENT
+    void payTicket(Payment payment, long ticketId){
+        Ticket currentTicket = ticket_repository.findById(ticketId);
+            currentTicket.setPayment(payment);
+            ticket_repository.save(currentTicket);
+    }
 
     // GETTER & SETTER
     public void setHandicappedUtilization(int handicappedUtilization) {

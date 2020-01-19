@@ -8,6 +8,7 @@ import java.time.format.DateTimeParseException;
 
 public class TicketForm {
 
+    // VARIABLES
     private LocalDate to;
     private LocalDate from;
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");

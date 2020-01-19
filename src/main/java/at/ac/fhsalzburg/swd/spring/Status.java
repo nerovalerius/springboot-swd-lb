@@ -7,6 +7,7 @@ public class Status {
     public String currentUserFirstName;
     public String currentUserLastName;
     public String loginStatus;
+    public String paymentStatus;
     public String ticketStatus;
     public String ticketCustomer;
     public boolean firstStart;
@@ -19,6 +20,7 @@ public class Status {
         ticketStatus = "";
         ticketCustomer = "";
         firstStart = true;
+        paymentStatus = "";
     }
 
 }

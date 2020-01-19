@@ -12,7 +12,6 @@ public class CustomerManagement {
     @Autowired
     private CustomerRepository customer_repository;
 
-    Customer currentCustomer;
 
     // ADD CUSTOMER
     List <Customer> addCustomer(Customer customer){
@@ -41,31 +40,30 @@ public class CustomerManagement {
         return (List<Customer>) customer_repository.findAll();
     };
 
-    // GET CUSTOMER BY LAST NAME - Inside the class diagram referred to as "getCustomer(licence String)"
-    List<Customer> getCustomer(String lastName){
-        return customer_repository.findByLastName(lastName);
+    // GET CUSTOMER BY NAME - Inside the class diagram referred to as "getCustomer(licence String)"
+    Customer getCustomer(String firstName, String lastName){
+
+        List<Customer> customersByLastName = customer_repository.findByLastName(lastName);
+
+        // No such user in list?
+        if (customersByLastName.isEmpty()){
+            return null;
+        } else {
+            for (Customer customerByLastName : customersByLastName) {
+                if (customerByLastName.getFirstName().equals(firstName)) {
+                    return customerByLastName;
+                }
+            }
+        }
+
+        return null;
     }
 
-    // GET TICKETS OF CUSTOMER
-    List<Ticket> getTicketsOfCustomer(Customer customer){
-        return customer.getTickets();
-    }
 
-
-    // DELETE CUSTOMER
+   // DELETE CUSTOMER
     void deleteCustomerById(long id){
         customer_repository.deleteById(id);
     }
-
-
-    public Customer getCurrentCustomer() {
-        return currentCustomer;
-    }
-
-    public void setCurrentCustomer(Customer currentCustomer) {
-        this.currentCustomer = currentCustomer;
-    }
-
 
 
 }

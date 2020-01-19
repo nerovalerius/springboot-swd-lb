@@ -81,7 +81,7 @@ public class MyController {
 
 		model.addAttribute("beanSession", sessionBean.getHashCode());
 
-
+		/*
 		if (status.firstStart == true){
 			Customer sepp = new Customer("dummy", "dummy");
 			customerManagement.addCustomer(sepp);
@@ -91,7 +91,7 @@ public class MyController {
 			status.firstStart = false;
 		}
 
-
+		*/
 
 
 		status.currentUserFirstName = "";
@@ -116,10 +116,9 @@ public class MyController {
 		if (firstName != null && firstName.length() > 0 //
 				&& lastName != null && lastName.length() > 0) {
 			// Customer already in list?
-			if (customerManagement.getCustomer(lastName).isEmpty()){
+			if (customerManagement.getCustomer(firstName, lastName) == null){
 				Customer newCustomer = new Customer(firstName, lastName);
 				customerManagement.addCustomer(newCustomer);
-				customerManagement.setCurrentCustomer(newCustomer);
 				status.loginStatus = " created and logged in";
 			} else {
 				status.loginStatus = " logged in";
@@ -163,20 +162,19 @@ public class MyController {
 		LocalDate to = ticketForm.getSqlTo();
 		LocalDate from = ticketForm.getSqlFrom();
 
-		Customer currentCustomer = new Customer(status.currentUserFirstName, status.currentUserLastName);
+		if(status.currentUserFirstName.equals("") || status.currentUserLastName.equals("")){
+
+			status.ticketStatus = ("ERROR: Ticket not created! - No User logged in");
+			return "redirect:/manageTickets";
+		}
+
+
+		Customer currentCustomer = customerManagement.getCustomer(status.currentUserFirstName, status.currentUserLastName);
 
 		// See if customer is already in list, if not then create
-		if(customerManagement.addCustomer(currentCustomer).isEmpty()){
-			List<Customer> customerList = customerManagement.getCustomer(status.currentUserLastName);
-			for (Customer customer : customerList){
-				if (customer.getFirstName() == currentCustomer.getFirstName()){
-					currentCustomer = customer;
-				}
-			}
-
-
-
-		}
+		if(currentCustomer == null){
+			currentCustomer = new Customer(status.currentUserFirstName, status.currentUserLastName);
+		};
 
 		// CHECK IF GIVE DATE IS VALID
 		if (to != null && from != null) {

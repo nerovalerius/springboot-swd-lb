@@ -18,6 +18,7 @@ public class Status {
         loginStatus = "not logged in";
         ticketStatus = "";
         ticketCustomer = "";
+        firstStart = true;
     }
 
 }

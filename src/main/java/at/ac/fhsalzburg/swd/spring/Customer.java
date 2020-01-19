@@ -20,10 +20,6 @@ public class Customer {
 	private String type;
 
 
-	@OneToMany
-	private List<Ticket> tickets;
-
-
 	// FUNCTIONS
 	boolean block(boolean newState){
 		this.blocked = newState;
@@ -87,20 +83,6 @@ public class Customer {
 	public void setType(String type) {
 		this.type = type;
 	}
-
-	public List<Ticket> getTickets() {
-		return tickets;
-	}
-
-	public void setTickets(List<Ticket> tickets) {
-		this.tickets = tickets;
-	}
-
-
-
-
-
-
 
 
 

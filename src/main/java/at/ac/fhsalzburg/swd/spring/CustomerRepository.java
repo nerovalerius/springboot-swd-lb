@@ -15,6 +15,9 @@ public interface CustomerRepository extends CrudRepository<Customer, Long> {
     List<Customer> findByLastName(String lastName);
 
 	@Transactional(timeout = 10)
+	List<Customer> findByFirstName(String firstName);
+
+	@Transactional(timeout = 10)
 	Customer findById(long id);
 	
 	//@Transactional(timeout = 10)

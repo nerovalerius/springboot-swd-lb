@@ -4,6 +4,7 @@ import org.apache.tomcat.jni.Local;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 
 @Entity
@@ -21,26 +22,10 @@ public class Ticket {
 			cascade =  CascadeType.ALL)
 	private Customer customer;
 
+	private double price;
 	private String type;
 	private String firstName;
 	private String lastName;
-
-    // CONSTRUCTORS
-    protected Ticket() {}
-
-    public Ticket(LocalDate to, LocalDate from, String type) {
-        this.sqlTo = to;
-        this.sqlFrom = from;
-        this.type = type;
-
-    }
-
-	public Ticket(Ticket ticket) {
-    	this.id = ticket.id;
-    	this.sqlTo = ticket.sqlTo;			// Funktioniert ohne sql im Namen nicht, weder mit java.util.date noch LocalDate
-    	this.sqlFrom = ticket.sqlFrom;
-    	this.type = ticket.type;
-	}
 
 
 	// GETTERS & SETTERS
@@ -86,7 +71,6 @@ public class Ticket {
 		this.lastName = customer.getLastName();
 	}
 
-
 	public String getFirstName() {
 		return this.firstName;
 	}
@@ -103,26 +87,40 @@ public class Ticket {
 		this.lastName = lastName;
 	}
 
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
+
+
+	// FUNCTIONS
+	private double calculatePrice(LocalDate from, LocalDate to){
+		// Calculate the difference in days
+		long days_difference = ChronoUnit.DAYS.between(to, from);
+
+		if(days_difference < 0){
+			days_difference *= -1;
+		}
+
+		return days_difference * 9.50;
+	}
+
 
 	// CONSTRUCTORS
-	Ticket(Customer customer){
-		this.customer = customer;
-		this.firstName = customer.getFirstName();
-		this.lastName = customer.getLastName();
-	}
-
-	Ticket(LocalDate to, LocalDate from, Customer customer){
+	public Ticket(LocalDate to, LocalDate from, Customer customer){
 		this.customer = customer;
 		this.firstName = customer.getFirstName();
 		this.lastName = customer.getLastName();
 		this.sqlTo = to;
 		this.sqlFrom = from;
+		this.price = calculatePrice(to, from);
 	}
 
-	Ticket(LocalDate to, LocalDate from){
-		this.sqlTo = to;
-		this.sqlFrom = from;
-	}
+	protected Ticket() {}
+
 
     /*
     @Override

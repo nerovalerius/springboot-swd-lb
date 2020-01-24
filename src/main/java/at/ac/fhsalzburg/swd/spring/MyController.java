@@ -299,17 +299,16 @@ public class MyController {
 	 REST MAPPING CUSTOMERS
 	 ***********************************************************************/
 
-	@GetMapping("/customers")
+	@RequestMapping(value="/customers")
 	public @ResponseBody List<Customer> allUsers() {
 
 		return (List<Customer>) customerManagement.getCustomers();
 	}
 
-	@RequestMapping(value = { "/customers/{id}" }, method = RequestMethod.GET)
-	public @ResponseBody Customer addCustomer(@PathVariable long id) {
-		Customer customer = customerManagement.getCustomer(id);
+	@RequestMapping(value="/customers", params = "licensePlates", method = RequestMethod.GET)
+	public @ResponseBody Customer getUserByLicensePlates(@RequestParam("licensePlates") String licensePlates) {
 
-		return customer;
+		return customerManagement.getCustomerByLicensePlates(licensePlates);
 	}
 
 	@RequestMapping(value = { "/customers/{id}" }, method = RequestMethod.PUT)
@@ -333,8 +332,13 @@ public class MyController {
 
 	@GetMapping("/tickets")
 	public @ResponseBody List<Ticket> allTickets() {
+		return ticketSystem.getTickets();
+	}
 
-		return (List<Ticket>) ticketSystem.getTickets();
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+	@RequestMapping(value = { "/tickets" }, params = "customerId", method = RequestMethod.GET)
+	public @ResponseBody List<Ticket> getTicketByCustomerId(@RequestParam("customerId") long customerId) {
+		return ticketSystem.getTicketsByCustomerId(customerId);
 	}
 
 	@RequestMapping(value = { "/tickets/{id}" }, method = RequestMethod.GET)
@@ -342,6 +346,39 @@ public class MyController {
 		Ticket ticket = ticketSystem.getTicket(id);
 
 		return ticket;
+	}
+
+	@RequestMapping(value = { "/checkInNoTicket/{licensePlates}" }, method = RequestMethod.PUT)
+	public @ResponseBody boolean checkIn(@PathVariable String licensePlates) {
+		Customer customer = customerManagement.getCustomerByLicensePlates(licensePlates);
+
+		Ticket tmpTicket = new Ticket();
+		Ticket ticket = ticketSystem.getNewTicket(tmpTicket);
+		ticket.setFrom(LocalDate.now());
+		ticket.setTo(LocalDate.now().plusDays(1));
+		ticket.setCustomer(customer);
+
+		//PRINT TICKET
+
+		//OPEN GATE
+		//WAIT
+		//CLOSE GATE
+
+		return true;
+	}
+
+	@RequestMapping(value = { "/checkIn/{ticketId}" }, method = RequestMethod.PUT)
+	public @ResponseBody boolean checkIn(@PathVariable long ticketId) {
+		Ticket ticket = ticketSystem.getTicket(ticketId);
+		boolean validTicket = ticketSystem.verifyTicket(ticket);
+
+		if (validTicket) {
+			//OPEN GATE
+			//WAIT
+			//CLOSE GATE
+		}
+
+		return validTicket;
 	}
 
 	@RequestMapping(value = { "/tickets/{id}" }, method = RequestMethod.PUT)

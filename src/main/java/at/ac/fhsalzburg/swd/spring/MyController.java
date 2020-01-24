@@ -311,6 +311,15 @@ public class MyController {
 		return customerManagement.getCustomerByLicensePlates(licensePlates);
 	}
 
+	@PostMapping("/customers")
+	public String setCustomer(@RequestBody Customer customer) {
+
+		customerManagement.addCustomer(customer);
+
+		return "redirect:/customers";
+	}
+
+	/*
 	@RequestMapping(value = { "/customers/{id}" }, method = RequestMethod.PUT)
 	public String setCustomer(@RequestBody Customer customer) {
 
@@ -318,6 +327,7 @@ public class MyController {
 
 		return "redirect:/customers";
 	}
+	*/
 
 	@DeleteMapping("/customers/{id}")
 	public String delete(@PathVariable String id) {
@@ -370,6 +380,9 @@ public class MyController {
 	@RequestMapping(value = { "/checkIn/{ticketId}" }, method = RequestMethod.PUT)
 	public @ResponseBody boolean checkIn(@PathVariable long ticketId) {
 		Ticket ticket = ticketSystem.getTicket(ticketId);
+
+		if (ticket == null) return false;
+
 		boolean validTicket = ticketSystem.verifyTicket(ticket);
 
 		if (validTicket) {

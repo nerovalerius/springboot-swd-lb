@@ -6,6 +6,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Date;
+
 @Service
 public class TicketSystem {  // By default Service annotation creates a singleton scoped bean - SINGLETON IS USED HERE
 
@@ -15,7 +19,8 @@ public class TicketSystem {  // By default Service annotation creates a singleto
     private int utilization;
     private int handicappedUtilization;
 
-
+    @Autowired
+    CustomerManagement customerManagement;
 
     // GET UTILIZATION
     public int getUtilization() {
@@ -50,18 +55,29 @@ public class TicketSystem {  // By default Service annotation creates a singleto
         return ticket_repository.findById(id);
     };
 
+    // GET NEW TICKET - In class diagram referred to getNewTicket(customer Customer)
+    List<Ticket> getTicketsByCustomerId(long customerId){
+        Customer tmpCustomer = customerManagement.getCustomer(customerId);
+        return ticket_repository.findByCustomer(tmpCustomer);
+    };
+
     // GET ALL TICKETS                                                          // NOT IN CLASS DIAGRAM
     List <Ticket> getTickets(){
         return (List<Ticket>) ticket_repository.findAll();
     }
+    
 
     // VERIFY TICKET
     boolean verifyTicket(Ticket ticket){
+        LocalDate from = ticket.getFrom();
+        LocalDate to = ticket.getTo();
+        LocalDate now = LocalDate.now();
 
-        long current_id = ticket.getId();
-        Ticket returned_ticket = ticket_repository.findById(current_id);
+        if(from.compareTo(now) <= 0 && to.compareTo(now) > 0) {
+            return true;
+        }
 
-        return (returned_ticket.getId() == ticket.getId());
+        return false;
     }
 
     // ADD PAYMENT

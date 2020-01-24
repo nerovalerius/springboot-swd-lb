@@ -32,6 +32,11 @@ public class CustomerManagement {  // By default Service annotation creates a si
         return customer_repository.findById(id);
     };
 
+    // GET CUSTOMER BY LicensePlates
+    Customer getCustomerByLicensePlates(String licensePlates){
+        return customer_repository.findByLicensePlates(licensePlates);
+    };
+
     // GET CUSTOMER BY LICENSE PLATES
     Customer getCustomer(String licensePlates) {
         return customer_repository.findByLicensePlates(licensePlates);

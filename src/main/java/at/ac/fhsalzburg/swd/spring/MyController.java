@@ -74,20 +74,6 @@ public class MyController {
 			session.setAttribute("count", count);
 		}
 
-		model.addAttribute("message",testService.doSomething());
-
-		model.addAttribute("halloNachricht","welcome to SWD lab");
-
-		model.addAttribute("customers", customerManagement.getCustomers());
-		model.addAttribute("tickets", ticketSystem.getTickets());
-		model.addAttribute("payments", paymentProvider.getPayments());
-
-		model.addAttribute("beanSingleton", singletonBean.getHashCode());
-
-		TestBean prototypeBean = context.getBean("prototypeBean", TestBean.class);
-		model.addAttribute("beanPrototype", prototypeBean.getHashCode());
-
-		model.addAttribute("beanSession", sessionBean.getHashCode());
 
 		// FILL STUFF WITH VALUES
 		if (status.firstStart == true){
@@ -121,6 +107,20 @@ public class MyController {
 		}
 
 
+		model.addAttribute("message",testService.doSomething());
+
+		model.addAttribute("halloNachricht","welcome to SWD lab");
+
+		model.addAttribute("customers", customerManagement.getCustomers());
+		model.addAttribute("tickets", ticketSystem.getTickets());
+		model.addAttribute("payments", paymentProvider.getPayments());
+
+		model.addAttribute("beanSingleton", singletonBean.getHashCode());
+
+		TestBean prototypeBean = context.getBean("prototypeBean", TestBean.class);
+		model.addAttribute("beanPrototype", prototypeBean.getHashCode());
+
+		model.addAttribute("beanSession", sessionBean.getHashCode());
 
 
 		status.currentUserFirstName = "";

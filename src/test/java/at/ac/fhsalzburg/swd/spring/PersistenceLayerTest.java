@@ -7,6 +7,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,9 @@ public class PersistenceLayerTest {
     @Autowired
     private CustomerRepository customerRepository;
 
+    @Autowired
+    private TicketRepository ticketRepository;
+
     @Test
     public void whenFindByName_thenReturnEmployee() {   // Best Practice: structure your code given/when/then// given
         Customer customer = new Customer("Max", "Mustermann");
@@ -34,4 +38,24 @@ public class PersistenceLayerTest {
         // then
         assertIterableEquals(given, found);
     }
+
+    @Test
+    public void whenFindByCustomer_thenReturnTicket() {   // Best Practice: structure your code given/when/then// given
+        Customer customer = new Customer("ARNOLD", "WEISSENEGGER");
+        entityManager.persist(customer);
+
+        Ticket ticket = new Ticket(LocalDate.now().plusDays(1), LocalDate.now(), customer);
+        entityManager.persist(ticket);
+        entityManager.flush();
+
+        List<Ticket> given = new ArrayList<Ticket>();
+        given.add(ticket);
+
+        // when
+        List<Ticket> found = ticketRepository.findByCustomer(customer);
+        // then
+        assertIterableEquals(given, found);
+    }
+
+
 }

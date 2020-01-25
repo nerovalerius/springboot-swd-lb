@@ -362,18 +362,10 @@ public class MyController {
 	public @ResponseBody boolean checkIn(@PathVariable String licensePlates) {
 		Customer customer = customerManagement.getCustomerByLicensePlates(licensePlates);
 
-		Ticket tmpTicket = new Ticket();
-		Ticket ticket = ticketSystem.getNewTicket(tmpTicket);
-		ticket.setFrom(LocalDate.now());
-		ticket.setTo(LocalDate.now().plusDays(1));
-		ticket.setCustomer(customer);
-
-		//PRINT TICKET
-
-		//OPEN GATE
-		//WAIT
-		//CLOSE GATE
-
+		Ticket tmpTicket = new Ticket(LocalDate.now().plusDays(1), LocalDate.now(), customer);
+		ticketSystem.getNewTicket(tmpTicket);
+	
+		//This is the return value for the gate. It can open now
 		return true;
 	}
 
@@ -385,12 +377,7 @@ public class MyController {
 
 		boolean validTicket = ticketSystem.verifyTicket(ticket);
 
-		if (validTicket) {
-			//OPEN GATE
-			//WAIT
-			//CLOSE GATE
-		}
-
+		//This is the return value for the gate. It can open now
 		return validTicket;
 	}
 
